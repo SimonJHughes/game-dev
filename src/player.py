@@ -6,7 +6,7 @@ class Character(pygame.sprite.Sprite):
     def __init__(self, position):
     
         #load image
-        self.sheet = pygame.image.load("player.png")
+        self.sheet = pygame.image.load("src\player.png")
         startX=12
         startY=20
         #defines area of a single sprite of an image
