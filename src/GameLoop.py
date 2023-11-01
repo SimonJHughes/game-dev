@@ -1,11 +1,13 @@
 import pygame
 import player
 
+
 pygame.init()
 
 clock = pygame.time.Clock()
 
 FPS = 24
+dummy =12
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
