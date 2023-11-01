@@ -5,36 +5,58 @@ pygame.init()
 
 clock = pygame.time.Clock()
 
-FPS = 60
+FPS = 24
 
-SCREEN_WIDTH = 850
-SCREEN_HEIGHT = 700
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-pygame.display.set_caption("Neophyte")
 
-def handle_input(key_pressed):
-    if(key[pygame.K_LEFT]):
-        print("Left key pressed")
-        #Handle left
-    elif(key[pygame.K_RIGHT]):
-        print("Right key pressed")
-        #Handle right
-    elif(key[pygame.K_UP]):
-        print("Up pressed")
-        #Handle up
-    elif(key[pygame.K_DOWN]):
-        print("Down pressed")
-        #Handle down
-    
-    
+
+
+
+
+
+
+#draw ground image
+
+
+
+#load image sequences
+
+
+#draw background images 
+
+
+		
+
+player = player.Character((400, 300))
 
 run = True
-
 while run:
-    
     clock.tick(FPS)
+	
     
-    key = pygame.key.get_pressed()
     
+	
+    key = pygame.key.get_pressed()	
+    
+        
+
+    
+	
+    for event in pygame.event.get():
+        if(event.type == pygame.QUIT):
+            run = False
+	
+    player.handle_event(event)
+    
+    screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
+    
+    pygame.display.flip()
+    clock.tick(20)
+    screen.fill((0,0,0))
+    
+
+pygame.quit()
