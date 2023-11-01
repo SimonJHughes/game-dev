@@ -42,7 +42,8 @@ while run:
     
     
 	
-    key = pygame.key.get_pressed()	
+    keys = pygame.key.get_pressed()
+
     
         
 
@@ -52,7 +53,7 @@ while run:
         if(event.type == pygame.QUIT):
             run = False
 	
-    player.handle_event(event)
+    player.handle_event(event, keys)
     
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
     
