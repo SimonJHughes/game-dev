@@ -124,7 +124,7 @@ class Character(pygame.sprite.Sprite):
                 self.update('stand_up')
             if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                 self.update('stand_down')
-                
+
         if (keys[pygame.K_w] or keys[pygame.K_UP]):
             self.update('up')
             
@@ -139,17 +139,5 @@ class Character(pygame.sprite.Sprite):
        
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
             self.update('right')
-        
-
-        # if event.type == pygame.KEYDOWN:
-
-        #     if event.key == pygame.K_a:
-        #         self.update('left')
-        #     if event.key == pygame.K_d:
-        #         self.update('right')
-        #     if event.key == pygame.K_w:
-        #         self.update('up')
-        #     if event.key == pygame.K_s:
-        #         self.update('down')
 
         
