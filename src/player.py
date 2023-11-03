@@ -89,6 +89,7 @@ class Character(pygame.sprite.Sprite):
             self.rect.x += self.speed
             if(self.rect.x>=800-self.rectWidth):
                 self.rect.x=800-self.rectWidth
+
         if direction == 'up':
             self.clip(self.up_states)
             self.rect.y -= self.speed
@@ -117,7 +118,8 @@ class Character(pygame.sprite.Sprite):
             self.image = self.sheet.subsurface(self.sheet.get_clip())
 
     def handle_event(self, event, keys):
-    
+        
+        
 
         if (keys[pygame.K_w] or keys[pygame.K_UP]):
             self.update('up')
@@ -135,6 +137,13 @@ class Character(pygame.sprite.Sprite):
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
             self.update('right')
             self.direction = 'r'
+            
+        if (not keys[pygame.K_d] and not keys[pygame.K_RIGHT] and not keys[pygame.K_a] and not keys[pygame.K_LEFT] and not keys[pygame.K_s] and not keys[pygame.K_DOWN] and not keys[pygame.K_w] and not keys[pygame.K_UP]):
+            self.idle()
+        
+
+        
+        
        
     def idle(self):
         if (self.direction == 'd'):
