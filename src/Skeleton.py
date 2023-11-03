@@ -1,17 +1,14 @@
-# -*- coding: utf-8 -*-
-
 import pygame
-import spell
 
-class Character(pygame.sprite.Sprite):
+class Skeleton(pygame.sprite.Sprite):
     def __init__(self, position):
     
         #load image
-        self.sheet = pygame.image.load("src/player.png")
-        startX=12
-        startY=20
+        self.sheet = pygame.image.load("src/skeleton.png")
+        startX=14
+        startY=526
         #defines area of a single sprite of an image
-        self.sheet.set_clip(pygame.Rect(startX, startY, 24, 24))
+        self.sheet.set_clip(pygame.Rect(startX, startY+397, 34, 48))
         
         #loads spritesheet images
         self.image = self.sheet.subsurface(self.sheet.get_clip())
@@ -24,32 +21,23 @@ class Character(pygame.sprite.Sprite):
         self.frame = 0
         self.direction ='d'
         
-        self.rectWidth = 24
-        self.rectHeight = 24
-
-        self.spells =[]
+        self.rectWidth = 34
+        self.rectHeight = 48
        
         
         self.speed = 10
 
        
-        self.down_idle_states= { 0: (startX, startY, self.rectWidth,  self.rectHeight), 1: (startX+48, startY, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY, self.rectWidth,  self.rectHeight), 3:(startX+48*3, startY, self.rectWidth,  self.rectHeight), 4:(startX+48*4, startY, self.rectWidth,  self.rectHeight), 5:(startX+48*5, startY, self.rectWidth,  self.rectHeight) }
+        self.down_idle_states= { 0: (startX, startY+127, self.rectWidth,  self.rectHeight)}
+        self.right_idle_states= { 0: (startX, startY+190, self.rectWidth,  self.rectHeight)}
+        self.left_idle_states = { 0: (startX, startY+61, self.rectWidth, self.rectHeight)}
+        self.up_idle_states= { 0: (startX, startY, self.rectWidth,  self.rectHeight) }    
 
         
-        self.right_idle_states= { 0: (startX, startY+48, self.rectWidth,  self.rectHeight), 1: (startX+48, startY+48, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY+48, self.rectWidth,  self.rectHeight), 3:(startX+48*3, startY+48, self.rectWidth,  self.rectHeight), 4:(startX+48*4, startY+48, self.rectWidth,  self.rectHeight), 5:(startX+48*5, startY+48, self.rectWidth,  self.rectHeight) }
-
-        
-        self.up_idle_states= { 0: (startX, startY+48*2, self.rectWidth,  self.rectHeight), 1: (startX+48*1, startY+48*2, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY+48*2, self.rectWidth,  self.rectHeight), 3:(startX+48*3, startY+48*2, self.rectWidth,  self.rectHeight), 4:(startX+48*4, startY+48*2, self.rectWidth,  self.rectHeight), 5:(startX+48*5, startY+48*2, self.rectWidth,  self.rectHeight) }    
-
-        self.down_states ={ 0: (startX, startY+48*3, self.rectWidth,  self.rectHeight), 1: (startX+48, startY+48*3, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY+48*3, self.rectWidth,  self.rectHeight), 3:(startX+48*3, startY+48*3, self.rectWidth,  self.rectHeight), 4:(startX+48*4, startY+48*3, self.rectWidth,  self.rectHeight), 5:(startX+48*5, startY+48*3, self.rectWidth,  self.rectHeight) }
-          
-        # had to reverse states due to incorrect spritesheet; in proper order ostritch would be walking backwards
-       
-        self.right_states= { 0: (startX, startY+48*4, self.rectWidth,  self.rectHeight), 1: (startX+48*1, startY+48*4, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY+48*4, self.rectWidth,  self.rectHeight), 3:(startX+48*3, startY+48*4, self.rectWidth,  self.rectHeight), 4:(startX+48*4, startY+48*4, self.rectWidth,  self.rectHeight), 5:(startX+48*4, startY+48*4, self.rectWidth,  self.rectHeight) }
-
-        
-        self.up_states= { 0: (startX, startY+48*5, self.rectWidth,  self.rectHeight), 1: (startX+48*1, startY+48*5, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY+48*5, self.rectWidth,  self.rectHeight), 3:(startX+48*3, startY+48*5, self.rectWidth,  self.rectHeight), 4:(startX+48*4, startY+48*5, self.rectWidth,  self.rectHeight), 5:(startX+48*5, startY+48*5, self.rectWidth,  self.rectHeight) }
-        self.left_still_state = {}
+        self.down_states ={ 0: (startX, startY+127, self.rectWidth,  self.rectHeight), 1: (startX+64, startY+127, self.rectWidth,  self.rectHeight), 2: (startX+64*2, startY+127, self.rectWidth,  self.rectHeight), 3:(startX+64*3, startY+127, self.rectWidth,  self.rectHeight), 4:(startX+64*4, startY+127, self.rectWidth,  self.rectHeight), 5:(startX+64*5, startY+127, self.rectWidth,  self.rectHeight), 6:(startX+64*6, startY+127, self.rectWidth,  self.rectHeight), 7:(startX+64*7, startY+127, self.rectWidth,  self.rectHeight), 8:(startX+64*8, startY+127, self.rectWidth,  self.rectHeight) }
+        self.up_states = { 0: (startX, startY, self.rectWidth, self.rectHeight), 1: (startX+64, startY, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY, self.rectWidth, self.rectHeight), 6: (startX+64*6, startY, self.rectWidth, self.rectHeight), 7: (startX+64*7, startY, self.rectWidth, self.rectHeight), 8: (startX+64*8, startY, self.rectWidth, self.rectHeight)}
+        self.left_states = { 0: (startX, startY+61, self.rectWidth, self.rectHeight), 1: (startX+64, startY+61, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+61, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+61, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+61, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+61, self.rectWidth, self.rectHeight), 6: (startX+64*6, startY+61, self.rectWidth, self.rectHeight), 7: (startX+64*7, startY+61, self.rectWidth, self.rectHeight), 8: (startX+64*7, startY+61, self.rectWidth, self.rectHeight) }
+        self.right_states = { 0: (startX, startY+190, self.rectWidth, self.rectHeight), 1: (startX+64, startY+190, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+190, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+190, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+190, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+190, self.rectWidth, self.rectHeight), 6: (startX+64*6, startY+190, self.rectWidth, self.rectHeight), 7: (startX+64*7, startY+190, self.rectWidth, self.rectHeight), 8: (startX+64*7, startY+190, self.rectWidth, self.rectHeight) }
 
         self.rectWidth= 75
         self.rectHeight=75
@@ -76,7 +64,7 @@ class Character(pygame.sprite.Sprite):
 
     def update(self, direction):
         if direction == 'left':
-            self.clip(self.right_states)
+            self.clip(self.left_states)
             #animate rect coordinates
             self.rect.x -= self.speed
 
@@ -103,7 +91,7 @@ class Character(pygame.sprite.Sprite):
                 self.rect.y=600-self.rectHeight
 
         if direction == 'stand_left':
-            self.clip(self.right_idle_states)
+            self.clip(self.left_idle_states)
         if direction == 'stand_right':
             self.clip(self.right_idle_states)
         if direction == 'stand_up':
@@ -111,11 +99,7 @@ class Character(pygame.sprite.Sprite):
         if direction == 'stand_down':
             self.clip(self.down_idle_states)
 
-        if direction == 'left' or direction == 'stand_left':
-            self.image = self.sheet.subsurface(self.sheet.get_clip())
-            self.image= pygame.transform.flip(self.image, 1, 0)
-        else:
-            self.image = self.sheet.subsurface(self.sheet.get_clip())
+        self.image = self.sheet.subsurface(self.sheet.get_clip())
 
     def handle_event(self, event, keys):
         
@@ -168,7 +152,3 @@ class Character(pygame.sprite.Sprite):
             self.update('stand_right')
         if (self.direction == 'l'):
             self.update('stand_left')
-
-    def equip_spell(self, spell):
-        self.spells.append(spell)
-        

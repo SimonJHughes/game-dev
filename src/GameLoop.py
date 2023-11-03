@@ -1,13 +1,14 @@
 import pygame
 import player
 import spell
+import Skeleton
 
 
 pygame.init()
 
 clock = pygame.time.Clock()
 
-FPS = 24
+FPS = 60
 
 
 SCREEN_WIDTH = 800
@@ -41,6 +42,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 		
 
 player = player.Character((400, 300))
+skeleton = Skeleton.Skeleton((100, 100))
 
 spell = spell.Spell(SPELL_X, SPELL_Y, SPELL_DISTANCE, SPELL_RADIUS, SPELL_TYPE)
 
@@ -66,9 +68,11 @@ while run:
             run = False
     
     player.handle_event(event, keys)
+    skeleton.handle_event(event, keys)
    
     
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
+    screen.blit(skeleton.image, skeleton.rect)
     
     pygame.display.flip()
     clock.tick(20)
