@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pygame
+import spell
 
 class Character(pygame.sprite.Sprite):
     def __init__(self, position):
@@ -21,10 +22,12 @@ class Character(pygame.sprite.Sprite):
         
         #variable for looping the frame sequence
         self.frame = 0
+        self.direction ='d'
         
         self.rectWidth = 24
         self.rectHeight = 24
 
+        self.spells =[]
        
         
         self.speed = 10
@@ -114,30 +117,35 @@ class Character(pygame.sprite.Sprite):
             self.image = self.sheet.subsurface(self.sheet.get_clip())
 
     def handle_event(self, event, keys):
-        if event.type == pygame.KEYUP:
-
-            if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                self.update('stand_left')
-            if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                self.update('stand_right')
-            if event.key == pygame.K_w or event.key == pygame.K_UP:
-                self.update('stand_up')
-            if event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                self.update('stand_down')
+    
 
         if (keys[pygame.K_w] or keys[pygame.K_UP]):
             self.update('up')
+            self.direction = 'u'
             
 
         if (keys[pygame.K_s] or keys[pygame.K_DOWN]):
             self.update('down')
-
+            self.direction = 'd'
         
         if (keys[pygame.K_a] or keys[pygame.K_LEFT]):
             self.update('left')
-
+            self.direction ='l'
        
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
             self.update('right')
+            self.direction = 'r'
+       
+    def idle(self):
+        if (self.direction == 'd'):
+            self.update('stand_down')
+        if (self.direction == 'u'):
+            self.update('stand_up')
+        if (self.direction == 'r'):
+            self.update('stand_right')
+        if (self.direction == 'l'):
+            self.update('stand_left')
 
+    def equip_spell(self, spell):
+        self.spells.append(spell)
         
