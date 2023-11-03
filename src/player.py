@@ -130,15 +130,29 @@ class Character(pygame.sprite.Sprite):
             self.update('down')
             self.direction = 'd'
         
+        
         if (keys[pygame.K_a] or keys[pygame.K_LEFT]):
             self.update('left')
             self.direction ='l'
-       
-        if (keys[pygame.K_d] or keys[pygame.K_RIGHT]):
+
+        if ((keys[pygame.K_d] or keys[pygame.K_RIGHT])):
             self.update('right')
             self.direction = 'r'
             
-        if (not keys[pygame.K_d] and not keys[pygame.K_RIGHT] and not keys[pygame.K_a] and not keys[pygame.K_LEFT] and not keys[pygame.K_s] and not keys[pygame.K_DOWN] and not keys[pygame.K_w] and not keys[pygame.K_UP]):
+       
+        
+            
+        #it is what it is
+        if ((not keys[pygame.K_d] and not keys[pygame.K_RIGHT] 
+             and not keys[pygame.K_a] and not keys[pygame.K_LEFT] 
+             and not keys[pygame.K_s] and not keys[pygame.K_DOWN] 
+             and not keys[pygame.K_w] and not keys[pygame.K_UP]) 
+             or ((keys[pygame.K_w] or keys[pygame.K_UP]) 
+                 and (keys[pygame.K_s] or keys[pygame.K_DOWN]))
+             or ((keys[pygame.K_d] or keys[pygame.K_RIGHT]) 
+                 and (keys[pygame.K_a] or keys[pygame.K_LEFT]))
+            ):
+            
             self.idle()
         
 
