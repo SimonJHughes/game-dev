@@ -25,7 +25,7 @@ class Skeleton(pygame.sprite.Sprite):
         self.rectHeight = 48
        
         
-        self.speed = 10
+        self.speed = 2
 
        
         self.down_idle_states= { 0: (startX, startY+127, self.rectWidth,  self.rectHeight)}
@@ -100,44 +100,25 @@ class Skeleton(pygame.sprite.Sprite):
             self.clip(self.down_idle_states)
 
         self.image = self.sheet.subsurface(self.sheet.get_clip())
-
-    def handle_event(self, event, keys):
         
+    def path_to_pos(self, x, y):
+        x_distance = self.rect.x - x
+        y_distance = self.rect.y - y
         
-
-        if (keys[pygame.K_w] or keys[pygame.K_UP]):
-            self.update('up')
-            self.direction = 'u'
-            
-
-        if (keys[pygame.K_s] or keys[pygame.K_DOWN]):
-            self.update('down')
-            self.direction = 'd'
-        
-        
-        if (keys[pygame.K_a] or keys[pygame.K_LEFT]):
-            self.update('left')
-            self.direction ='l'
-
-        if ((keys[pygame.K_d] or keys[pygame.K_RIGHT])):
-            self.update('right')
-            self.direction = 'r'
-            
-       
-        
-            
-        #it is what it is
-        if ((not keys[pygame.K_d] and not keys[pygame.K_RIGHT] 
-             and not keys[pygame.K_a] and not keys[pygame.K_LEFT] 
-             and not keys[pygame.K_s] and not keys[pygame.K_DOWN] 
-             and not keys[pygame.K_w] and not keys[pygame.K_UP]) 
-             or ((keys[pygame.K_w] or keys[pygame.K_UP]) 
-                 and (keys[pygame.K_s] or keys[pygame.K_DOWN]))
-             or ((keys[pygame.K_d] or keys[pygame.K_RIGHT]) 
-                 and (keys[pygame.K_a] or keys[pygame.K_LEFT]))
-            ):
-            
-            self.idle()
+        if(abs(x_distance) > abs(y_distance)):
+            if(x_distance > 0):
+                self.update('left')
+                self.direction = 'l'
+            elif(x_distance <= 0):
+                self.update('right')
+                self.direction = 'r'
+        else:
+            if(y_distance > 0):
+                self.update('up')
+                self.direction = 'u'
+            elif(y_distance <= 0):
+                self.update('down')
+                self.direction = 'd'
         
 
         

@@ -68,7 +68,8 @@ while run:
             run = False
     
     player.handle_event(event, keys)
-    skeleton.handle_event(event, keys)
+
+    skeleton.path_to_pos(player.rect.x, player.rect.y)
    
     
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
