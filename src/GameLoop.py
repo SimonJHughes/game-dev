@@ -67,13 +67,44 @@ while run:
         if(event.type == pygame.QUIT):
             run = False
     
-    player.handle_event(event, keys)
+
+   
+    if(player.health>0):
+        player.handle_event(keys)
+
+    else:
+        player.die()
+    
+
+
 
     skeleton.path_to_pos(player.rect.x, player.rect.y)
    
     
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
     screen.blit(skeleton.image, skeleton.rect)
+
+    #draw player health bar
+    pygame.draw.rect(screen, (0,255,0), (player.rect.x+12,player.rect.y-7, 40,7))
+    
+    if (pygame.Rect.colliderect(player.rect, skeleton.rect)):
+        player.takeDamage('skeleton')
+
+
+    if(player.health >0):
+        pygame.draw.rect(screen, (255,0,0), ((player.rect.x+52)-(40-player.health),player.rect.y-7, (40-player.health),7))
+    else:
+        pygame.draw.rect(screen, (255,0,0), ((player.rect.x+52)-(40),player.rect.y-7, (40),7))
+        
+
+   
+        
+    
+        
+
+    
+        
+    
     
     pygame.display.flip()
     clock.tick(20)

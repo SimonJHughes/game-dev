@@ -20,6 +20,8 @@ class Character(pygame.sprite.Sprite):
         #position image in the screen surface
         self.rect.topleft = position
         
+        self.health =40
+        
         #variable for looping the frame sequence
         self.frame = 0
         self.direction ='d'
@@ -49,11 +51,17 @@ class Character(pygame.sprite.Sprite):
 
         
         self.up_states= { 0: (startX, startY+48*5, self.rectWidth,  self.rectHeight), 1: (startX+48*1, startY+48*5, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY+48*5, self.rectWidth,  self.rectHeight), 3:(startX+48*3, startY+48*5, self.rectWidth,  self.rectHeight), 4:(startX+48*4, startY+48*5, self.rectWidth,  self.rectHeight), 5:(startX+48*5, startY+48*5, self.rectWidth,  self.rectHeight) }
-        self.left_still_state = {}
+
+        self.death_states= {0: (startX, startY+48*9, self.rectWidth,  self.rectHeight), 1: (startX+48, startY+48*9, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY+48*9, self.rectWidth,  self.rectHeight)}
+        
 
         self.rectWidth= 75
         self.rectHeight=75
         
+   
+
+    
+
         
         
 
@@ -73,8 +81,22 @@ class Character(pygame.sprite.Sprite):
         else:
             self.sheet.set_clip(pygame.Rect(clipped_rect))
         return clipped_rect
+    
+    
+
+    def takeDamage(self, enemy):
+        if (enemy == 'skeleton'):
+            self.health -=1
+        
+    def die(self):
+        for i in range (0,3):
+            self.sheet.set_clip(pygame.Rect(self.death_states[i]))
+            self.image = self.sheet.subsurface(self.sheet.get_clip())
+            i+=1
 
     def update(self, direction):
+        
+
         if direction == 'left':
             self.clip(self.right_states)
             #animate rect coordinates
@@ -114,10 +136,16 @@ class Character(pygame.sprite.Sprite):
         if direction == 'left' or direction == 'stand_left':
             self.image = self.sheet.subsurface(self.sheet.get_clip())
             self.image= pygame.transform.flip(self.image, 1, 0)
+
+
         else:
             self.image = self.sheet.subsurface(self.sheet.get_clip())
 
-    def handle_event(self, event, keys):
+        
+
+        
+
+    def handle_event(self, keys):
         
         
 
@@ -146,11 +174,13 @@ class Character(pygame.sprite.Sprite):
         if ((not keys[pygame.K_d] and not keys[pygame.K_RIGHT] 
              and not keys[pygame.K_a] and not keys[pygame.K_LEFT] 
              and not keys[pygame.K_s] and not keys[pygame.K_DOWN] 
-             and not keys[pygame.K_w] and not keys[pygame.K_UP]) 
+             and not keys[pygame.K_w] and not keys[pygame.K_UP]
+             and self.health>0) 
              or ((keys[pygame.K_w] or keys[pygame.K_UP]) 
                  and (keys[pygame.K_s] or keys[pygame.K_DOWN]))
              or ((keys[pygame.K_d] or keys[pygame.K_RIGHT]) 
                  and (keys[pygame.K_a] or keys[pygame.K_LEFT]))
+             
             ):
             
             self.idle()
@@ -171,4 +201,6 @@ class Character(pygame.sprite.Sprite):
 
     def equip_spell(self, spell):
         self.spells.append(spell)
+
+    
         
