@@ -1,14 +1,16 @@
 import pygame
 
-class Spell(pygame.sprite.Sprite):
-    def __init__(self, x, y, distance, radius, spellType):
+class Particle(object):
+    def __init__(self, x, y, distance, radius, xSpeed, ySpeed, spellType):
         self.x= x
         self.y =y
+        self.xSpeed =xSpeed
+        self.ySpeed = ySpeed
         self.distance = distance
         self.spellType = spellType
         self.radius = radius
         if (spellType == 'fire'):
-            self.color = ((9235, 27, 12))
+            self.color = ((235, 27, 12))
 
         elif (spellType == 'light'):
             self.color = ((255, 255, 255))
@@ -25,5 +27,22 @@ class Spell(pygame.sprite.Sprite):
         else:
             self.color= ((148, 3, 10))
 
+    
+          
+
     def draw(self,screen):
         pygame.draw.circle(screen, self.color, (self.x,self.y), self.radius)
+
+class Spell(object):
+    def __init__(self, x, y, distance, radius, speed, spellType, amt):
+        self.particles =[]
+        
+        for i in range (amt): 
+            self.particle = Particle(x, y, distance, radius, speed, spellType)
+            self.particles.append(self.particle) 
+    
+
+
+        
+   
+

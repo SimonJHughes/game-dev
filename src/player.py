@@ -2,7 +2,7 @@
 
 import pygame
 import spell
-import time
+
 
 class Character(pygame.sprite.Sprite):
     def __init__(self, position):
@@ -31,6 +31,7 @@ class Character(pygame.sprite.Sprite):
         self.rectHeight = 24
 
         self.spells =[]
+
        
         
         self.speed = 10
@@ -46,7 +47,7 @@ class Character(pygame.sprite.Sprite):
 
         self.down_states ={ 0: (startX, startY+48*3, self.rectWidth,  self.rectHeight), 1: (startX+48, startY+48*3, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY+48*3, self.rectWidth,  self.rectHeight), 3:(startX+48*3, startY+48*3, self.rectWidth,  self.rectHeight), 4:(startX+48*4, startY+48*3, self.rectWidth,  self.rectHeight), 5:(startX+48*5, startY+48*3, self.rectWidth,  self.rectHeight) }
           
-        # had to reverse states due to incorrect spritesheet; in proper order ostritch would be walking backwards
+      
        
         self.right_states= { 0: (startX, startY+48*4, self.rectWidth,  self.rectHeight), 1: (startX+48*1, startY+48*4, self.rectWidth,  self.rectHeight), 2: (startX+48*2, startY+48*4, self.rectWidth,  self.rectHeight), 3:(startX+48*3, startY+48*4, self.rectWidth,  self.rectHeight), 4:(startX+48*4, startY+48*4, self.rectWidth,  self.rectHeight), 5:(startX+48*4, startY+48*4, self.rectWidth,  self.rectHeight) }
 
@@ -168,6 +169,11 @@ class Character(pygame.sprite.Sprite):
         if ((keys[pygame.K_d] or keys[pygame.K_RIGHT])):
             self.update('right')
             self.direction = 'r'
+
+        #Part of in progress projectile work outside of game loop
+
+        # if (keys[pygame.K_SPACE]):
+        #     self.fireSpell(self.direction)
             
        
         
@@ -187,8 +193,25 @@ class Character(pygame.sprite.Sprite):
             
             self.idle()
         
-
+    #DEAD CODE TO BE LOOKED INTO:
+    #want to find better way of handling projectile outside of gameloop
         
+
+    # def fireSpell(self, direction):
+        
+        
+        # for particle in self.spells[0].particles:
+        #     if particle.x < 800 and particle.x > 0 and particle.y<600 and particle.y>0:
+        #         if direction == 'r':
+        #             particle.x += particle.speed  
+        #         elif direction=='l':
+        #             particle.x-= particle.speed
+        #         elif direction == 'u':
+        #             particle.y-=particle.speed
+        #         elif direction =='d':
+        #             particle.y+=particle.speed
+        #     else:
+        #         self.spells[0].particles.pop(0)
         
        
     def idle(self):
