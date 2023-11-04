@@ -22,6 +22,9 @@ SPELL_RADIUS = 5
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+#set font for lose message
+loserFont = pygame.font.Font('src/ENDOR.ttf', 50)
+
 
 
 
@@ -74,6 +77,9 @@ while run:
 
     else:
         player.die()
+        loseMessage = loserFont.render('You Died', True, (148, 3, 10))
+        screen.blit(loseMessage, (300,350))
+
     
 
 

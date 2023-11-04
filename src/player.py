@@ -2,6 +2,7 @@
 
 import pygame
 import spell
+import time
 
 class Character(pygame.sprite.Sprite):
     def __init__(self, position):
@@ -93,6 +94,7 @@ class Character(pygame.sprite.Sprite):
             self.sheet.set_clip(pygame.Rect(self.death_states[i]))
             self.image = self.sheet.subsurface(self.sheet.get_clip())
             i+=1
+            
 
     def update(self, direction):
         
