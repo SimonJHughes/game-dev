@@ -18,7 +18,7 @@ SPELL_X = 400
 SPELL_Y = 300
 SPELL_DISTANCE=200
 #Change this and you will change the color of the spell :o
-SPELL_TYPE = 'poison'
+SPELL_TYPE = 'light'
 SPELL_RADIUS = 5
 
 
@@ -84,6 +84,15 @@ while run:
             particle.y+=particle.ySpeed
         else:
             particles.pop(0)
+
+        if (pygame.Rect.colliderect(particle.rect, skeleton.rect)):
+            #draw skeleton health bar when it takes damage
+            if skeleton.health>0:
+                pygame.draw.rect(screen, (0,255,0),(skeleton.rect.x+3,skeleton.rect.y-7, 30,7))
+                pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30-skeleton.health),skeleton.rect.y-7, (30-skeleton.health),7))
+            else:
+                pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30),skeleton.rect.y-7, (30),7))
+            skeleton.takeDamage(particle)
     
     
 
@@ -100,29 +109,16 @@ while run:
             elif player.direction =='d':
                 SPELL_YSPEED=20
 
-            particles.append(spell.Particle(round(player.rect.x + player.rect.width //2), round(player.rect.y + player.rect.height//2), SPELL_DISTANCE, SPELL_RADIUS, SPELL_XSPEED, SPELL_YSPEED, SPELL_TYPE))
+            particles.append(spell.Particle(round(player.rect.x + player.rect.width), round(player.rect.y + player.rect.height), SPELL_DISTANCE, SPELL_RADIUS, SPELL_XSPEED, SPELL_YSPEED, SPELL_TYPE))
             
     ########################################################################################
-          
-
-
-    if(player.health>0):
-        player.handle_event(keys)
-
-        #part of rudimetary spell functionality
-        for particle in particles:
-            particle.draw(screen)
-
-    else:
-        player.die()
-        loseMessage = loserFont.render('You Died', True, (148, 3, 10))
-        screen.blit(loseMessage, (300,350))
+        
 
     
 
 
 
-    skeleton.path_to_pos(player.rect.x, player.rect.y)
+    
    
     
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
@@ -137,15 +133,37 @@ while run:
 
     #draw player health bar
     pygame.draw.rect(screen, (0,255,0), (player.rect.x+12,player.rect.y-7, 40,7))
+
     
+
     if (pygame.Rect.colliderect(player.rect, skeleton.rect)):
         player.takeDamage('skeleton')
+
+    if(skeleton.health<=0):
+        skeleton.die()
+        #TODO: Spawn a replacement skeleton. Somehow keep original skeleton dead body onscreen.
+        #skeleton = Skeleton.Skeleton((400, 100))
+    else:
+        skeleton.path_to_pos(player.rect.x, player.rect.y)
+        
+
 
 
     if(player.health >0):
         pygame.draw.rect(screen, (255,0,0), ((player.rect.x+52)-(40-player.health),player.rect.y-7, (40-player.health),7))
+        player.handle_event(keys)
+
+        #part of rudimetary spell functionality
+        for particle in particles:
+            particle.update()
+            particle.draw(screen)
+        ####################
+        
     else:
         pygame.draw.rect(screen, (255,0,0), ((player.rect.x+52)-(40),player.rect.y-7, (40),7))
+        player.die()
+        loseMessage = loserFont.render('You Died', True, (148, 3, 10))
+        screen.blit(loseMessage, (300,350))
         
 
    

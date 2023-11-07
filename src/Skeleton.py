@@ -1,4 +1,5 @@
 import pygame
+import time
 
 class Skeleton(pygame.sprite.Sprite):
     def __init__(self, position):
@@ -26,6 +27,7 @@ class Skeleton(pygame.sprite.Sprite):
        
         
         self.speed = 2
+        self.health = 30
 
        
         self.down_idle_states= { 0: (startX, startY+127, self.rectWidth,  self.rectHeight)}
@@ -39,11 +41,21 @@ class Skeleton(pygame.sprite.Sprite):
         self.left_states = { 0: (startX, startY+61, self.rectWidth, self.rectHeight), 1: (startX+64, startY+61, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+61, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+61, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+61, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+61, self.rectWidth, self.rectHeight), 6: (startX+64*6, startY+61, self.rectWidth, self.rectHeight), 7: (startX+64*7, startY+61, self.rectWidth, self.rectHeight), 8: (startX+64*7, startY+61, self.rectWidth, self.rectHeight) }
         self.right_states = { 0: (startX, startY+190, self.rectWidth, self.rectHeight), 1: (startX+64, startY+190, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+190, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+190, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+190, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+190, self.rectWidth, self.rectHeight), 6: (startX+64*6, startY+190, self.rectWidth, self.rectHeight), 7: (startX+64*7, startY+190, self.rectWidth, self.rectHeight), 8: (startX+64*7, startY+190, self.rectWidth, self.rectHeight) }
 
+        self.death_states ={0: (startX, startY+768, self.rectWidth, self.rectHeight), 1: (startX+64, startY+768, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+768, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+768, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+768, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+768, self.rectWidth, self.rectHeight)}
+
         self.rectWidth= 75
         self.rectHeight=75
         
         
+    def takeDamage(self, spell):
         
+            self.health -=spell.damage
+        
+    def die(self):
+        for i in range (0,6):
+            self.sheet.set_clip(pygame.Rect(self.death_states[i]))
+            self.image = self.sheet.subsurface(self.sheet.get_clip())
+            i+=1
 
     def get_frame(self, frame_set):
         #looping the sprite sequences.
