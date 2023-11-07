@@ -4,6 +4,18 @@ import spell
 import Skeleton
 
 
+#TODO: Make new skeleton spawn after death, keep corpse of other skeleton on screen
+#      Make corpse not deal damage to player
+#
+#      Put more of spell shooting functionality in player and Spell files. The bones are still there,
+#      just get them to work
+#
+#      Create a draw health bar function to clean up gross pygame.draw.rect calls in gameLoop.
+#
+#      Put in a background: Tile program? Seems to be what everyone else in the class is using.
+#
+#      Add particle effects and sprites to spells, not just different colored circles.
+
 pygame.init()
 
 clock = pygame.time.Clock()
@@ -117,12 +129,13 @@ while run:
     
 
 
-
+    
     
    
     
-    screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
+    
     screen.blit(skeleton.image, skeleton.rect)
+    screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
 
     
     
@@ -131,25 +144,26 @@ while run:
             
        
 
-    #draw player health bar
-    pygame.draw.rect(screen, (0,255,0), (player.rect.x+12,player.rect.y-7, 40,7))
+  
+    
 
     
 
     if (pygame.Rect.colliderect(player.rect, skeleton.rect)):
         player.takeDamage('skeleton')
 
+    
     if(skeleton.health<=0):
         skeleton.die()
         #TODO: Spawn a replacement skeleton. Somehow keep original skeleton dead body onscreen.
         #skeleton = Skeleton.Skeleton((400, 100))
     else:
         skeleton.path_to_pos(player.rect.x, player.rect.y)
-        
 
 
 
     if(player.health >0):
+        pygame.draw.rect(screen, (0,255,0), (player.rect.x+12,player.rect.y-7, 40,7))
         pygame.draw.rect(screen, (255,0,0), ((player.rect.x+52)-(40-player.health),player.rect.y-7, (40-player.health),7))
         player.handle_event(keys)
 
@@ -160,7 +174,7 @@ while run:
         ####################
         
     else:
-        pygame.draw.rect(screen, (255,0,0), ((player.rect.x+52)-(40),player.rect.y-7, (40),7))
+        # pygame.draw.rect(screen, (255,0,0), ((player.rect.x+52)-(40),player.rect.y-7, (40),7))
         player.die()
         loseMessage = loserFont.render('You Died', True, (148, 3, 10))
         screen.blit(loseMessage, (300,350))
