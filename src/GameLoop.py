@@ -31,7 +31,9 @@ SPELL_X = 400
 SPELL_Y = 300
 SPELL_DISTANCE=200
 #Change this and you will change the color of the spell :o
-SPELL_TYPE = 'light'
+SPELL_TYPE_ARR = ['light', 'dark', 'fire', 'poison', 'water']
+SPELL_INDEX =0
+SPELL_TYPE = SPELL_TYPE_ARR[SPELL_INDEX]
 SPELL_RADIUS = 5
 
 
@@ -99,9 +101,15 @@ while run:
             run = False
         if(event.type == spawn_skeleton):
             enemies.append(Skeleton.Skeleton((random.randint(100, 700), random.randint(100, 600))))
+        if (event.type==pygame.KEYDOWN and event.key ==pygame.K_TAB):
+                SPELL_INDEX+= 1 
+                print(SPELL_INDEX)
+        # if(SPELL_INDEX >= len(SPELL_TYPE_ARR)):
+        #     SPELL_INDEX%=len(SPELL_TYPE_ARR)
+                SPELL_TYPE= SPELL_TYPE_ARR[SPELL_INDEX%len(SPELL_TYPE_ARR)]
     
     ################RUDIMENTARY SPELL FUNCTIONALITY UNTIL I CAN GET IT TO WORK OUTSIDE OF GAME LOOP###########################
-
+   
     for particle in particles:
         if particle.x < 800 and particle.x > 0 and particle.y<600 and particle.y>0:
             particle.x+=particle.xSpeed
@@ -119,6 +127,8 @@ while run:
                     pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30),skeleton.rect.y-7, (30),7))
                 skeleton.takeDamage(particle)
     
+    
+
     
 
     if (keys[pygame.K_SPACE]):
