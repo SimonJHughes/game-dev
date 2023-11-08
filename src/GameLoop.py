@@ -145,6 +145,8 @@ while run:
     
 
     if (keys[pygame.K_SPACE]):
+        if(SPELL_TYPE == 'dark'):
+            player.health-=1
         if len(particles)<5:
             SPELL_XSPEED=0
             SPELL_YSPEED=0

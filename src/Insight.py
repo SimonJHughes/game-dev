@@ -13,7 +13,7 @@ class Insight():
         self.sheet = pygame.image.load('src/insight.png')
         self.sheet.set_clip(pygame.Rect(256, 256, 680, 634))
         self.image = pygame.transform.scale(self.sheet.subsurface(self.sheet.get_clip()), (25, 25))
-        self.rect = pygame.Rect((self.x, self.y, 25, 25))
+        self.rect = pygame.Rect((self.x, self.y, 50, 50))
     
 
         
