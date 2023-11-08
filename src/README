@@ -1,2 +1,3 @@
 Run outside of src directory with command "python src/GameLoop.py"
 
+WASD or arrow keys to move, SPACE to shoot, TAB to swtich spells
