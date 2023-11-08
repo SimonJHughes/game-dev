@@ -2,6 +2,7 @@ import pygame
 import player
 import spell
 import Skeleton
+import random
 
 
 #TODO: Make new skeleton spawn after death, keep corpse of other skeleton on screen
@@ -62,7 +63,8 @@ loserFont = pygame.font.Font('src/ENDOR.ttf', 50)
 		
 
 player = player.Character((400, 300))
-skeleton = Skeleton.Skeleton((100, 100))
+first_skeleton = Skeleton.Skeleton((100, 100))
+enemies = [first_skeleton]
 
 #Relics of an ancient time. May be brought back to life? Must try to implement spell firing outside of gameLoop
 
@@ -73,7 +75,13 @@ skeleton = Skeleton.Skeleton((100, 100))
 
 particles = []
 run = True
+
+timer_interval = 10000
+spawn_skeleton = pygame.USEREVENT + 1
+pygame.time.set_timer(spawn_skeleton, timer_interval)
+
 while run:
+    
     screen.blit(background, (0, 0))
     clock.tick(FPS)
 	
@@ -89,6 +97,8 @@ while run:
     for event in pygame.event.get():
         if(event.type == pygame.QUIT):
             run = False
+        if(event.type == spawn_skeleton):
+            enemies.append(Skeleton.Skeleton((random.randint(100, 700), random.randint(100, 600))))
     
     ################RUDIMENTARY SPELL FUNCTIONALITY UNTIL I CAN GET IT TO WORK OUTSIDE OF GAME LOOP###########################
 
@@ -98,15 +108,16 @@ while run:
             particle.y+=particle.ySpeed
         else:
             particles.pop(0)
-
-        if (pygame.Rect.colliderect(particle.rect, skeleton.rect)):
-            #draw skeleton health bar when it takes damage
-            if skeleton.health>0:
-                pygame.draw.rect(screen, (0,255,0),(skeleton.rect.x+3,skeleton.rect.y-7, 30,7))
-                pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30-skeleton.health),skeleton.rect.y-7, (30-skeleton.health),7))
-            else:
-                pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30),skeleton.rect.y-7, (30),7))
-            skeleton.takeDamage(particle)
+        for skeleton in enemies:
+            if (pygame.Rect.colliderect(particle.rect, skeleton.rect)):
+                #draw skeleton health bar when it takes damage
+                particle.rect = (pygame.Rect(-1000, -1000, 0, 0))
+                if skeleton.health>0:
+                    pygame.draw.rect(screen, (0,255,0),(skeleton.rect.x+3,skeleton.rect.y-7, 30,7))
+                    pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30-skeleton.health),skeleton.rect.y-7, (30-skeleton.health),7))
+                else:
+                    pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30),skeleton.rect.y-7, (30),7))
+                skeleton.takeDamage(particle)
     
     
 
@@ -135,8 +146,8 @@ while run:
     
    
     
-    
-    screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
+    for skeleton in enemies:
+        screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
 
     
@@ -150,17 +161,17 @@ while run:
     
 
     
+    for skeleton in enemies:
+        if (pygame.Rect.colliderect(player.rect, skeleton.rect) and skeleton.health > 0):
+            player.takeDamage('skeleton')
 
-    if (pygame.Rect.colliderect(player.rect, skeleton.rect)):
-        player.takeDamage('skeleton')
-
-    
-    if(skeleton.health<=0):
-        skeleton.die()
-        #TODO: Spawn a replacement skeleton. Somehow keep original skeleton dead body onscreen.
-        #skeleton = Skeleton.Skeleton((400, 100))
-    else:
-        skeleton.path_to_pos(player.rect.x, player.rect.y)
+    for skeleton in enemies:
+        if(skeleton.health<=0):
+            skeleton.die()
+            #TODO: Spawn a replacement skeleton. Somehow keep original skeleton dead body onscreen.
+            #skeleton = Skeleton.Skeleton((400, 100))
+        else:
+            skeleton.path_to_pos(player.rect.x, player.rect.y)
 
 
 
