@@ -3,6 +3,7 @@ import player
 import spell
 import Skeleton
 import random
+import Insight
 
 
 #TODO: 
@@ -67,6 +68,12 @@ spellUIFont =pygame.font.Font('src/ENDOR.ttf', 25)
 player = player.Character((400, 300))
 first_skeleton = Skeleton.Skeleton((100, 100))
 enemies = [first_skeleton]
+dead_enemies = []
+
+#Array storing insight entities
+total_insight = 0
+item_entities = []
+
 
 #Relics of an ancient time. May be brought back to life? Must try to implement spell firing outside of gameLoop
 
@@ -126,6 +133,12 @@ while run:
                 else:
                     pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30),skeleton.rect.y-7, (30),7))
                 skeleton.takeDamage(particle)
+                
+    for insight in item_entities:
+        if(pygame.Rect.colliderect(insight.rect, player.rect)):
+            total_insight += 1
+            item_entities.remove(insight)
+          
     
     
 
@@ -154,12 +167,18 @@ while run:
 
     
     
+    for dead_enemy in dead_enemies:
+        screen.blit(pygame.transform.scale(dead_enemy.image, (50, 60)), dead_enemy.rect)
    
-    
     for skeleton in enemies:
         screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
+     
+    for insight in item_entities:
+        screen.blit(insight.image, insight.rect)
+    
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
-
+    
+    
     
     
 
@@ -178,12 +197,11 @@ while run:
     for skeleton in enemies:
         if(skeleton.health<=0):
             skeleton.die()
-            #TODO: Spawn a replacement skeleton. Somehow keep original skeleton dead body onscreen.
-            #skeleton = Skeleton.Skeleton((400, 100))
+            item_entities.append(Insight.Insight(skeleton.rect.x + 20, skeleton.rect.y + 25))
+            dead_enemies.append(skeleton)
+            enemies.remove(skeleton)
         else:
             skeleton.path_to_pos(player.rect.x, player.rect.y)
-
-
 
     if(player.health >0):
         pygame.draw.rect(screen, (0,255,0), (player.rect.x+12,player.rect.y-7, 40,7))
@@ -201,7 +219,7 @@ while run:
         player.die()
         loseMessage = loserFont.render('You Died', True, (148, 3, 10))
         screen.blit(loseMessage, (300,350))
-        
+
 
    
         
@@ -224,6 +242,14 @@ while run:
         
     screen.blit(spellUI, (SCREEN_WIDTH-210,20))
 
+    #Insight
+    insightUI = pygame.Surface((200,50))  
+    insightUI.set_alpha(128)              
+    insightUI.fill((217, 201, 156))
+    currentInsightMessage = spellUIFont.render(f'Insight: {total_insight}', True, (148, 3, 10))
+    
+    insightUI.blit(currentInsightMessage, (0, 0))
+    screen.blit(insightUI, (10, 10))
     
     pygame.display.flip()
     clock.tick(20)
