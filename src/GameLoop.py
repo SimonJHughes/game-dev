@@ -136,7 +136,7 @@ while run:
    
     
     
-    screen.blit(skeleton.image, skeleton.rect)
+    screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
 
     
