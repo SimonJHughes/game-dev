@@ -5,8 +5,7 @@ import Skeleton
 import random
 
 
-#TODO: Make new skeleton spawn after death, keep corpse of other skeleton on screen
-#      Make corpse not deal damage to player
+#TODO: 
 #
 #      Put more of spell shooting functionality in player and Spell files. The bones are still there,
 #      just get them to work
@@ -44,6 +43,7 @@ background = pygame.image.load("src/background.jpeg")
 
 #set font for lose message
 loserFont = pygame.font.Font('src/ENDOR.ttf', 50)
+spellUIFont =pygame.font.Font('src/ENDOR.ttf', 25)
 
 
 
@@ -84,8 +84,11 @@ pygame.time.set_timer(spawn_skeleton, timer_interval)
 
 while run:
     
-    screen.blit(background, (0, 0))
+    screen.blit(background, (-100, 0))
     clock.tick(FPS)
+
+   
+    
 	
     
     
@@ -103,9 +106,6 @@ while run:
             enemies.append(Skeleton.Skeleton((random.randint(100, 700), random.randint(100, 600))))
         if (event.type==pygame.KEYDOWN and event.key ==pygame.K_TAB):
                 SPELL_INDEX+= 1 
-                print(SPELL_INDEX)
-        # if(SPELL_INDEX >= len(SPELL_TYPE_ARR)):
-        #     SPELL_INDEX%=len(SPELL_TYPE_ARR)
                 SPELL_TYPE= SPELL_TYPE_ARR[SPELL_INDEX%len(SPELL_TYPE_ARR)]
     
     ################RUDIMENTARY SPELL FUNCTIONALITY UNTIL I CAN GET IT TO WORK OUTSIDE OF GAME LOOP###########################
@@ -211,6 +211,19 @@ while run:
     
         
     
+    #UI
+    spellUI = pygame.Surface((200,100))  
+    spellUI.set_alpha(128)              
+    spellUI.fill((217, 201, 156))  
+    currentSpellMessage = spellUIFont.render('Current Spell:', True, (148, 3, 10))
+    colorSpell = spell.Particle(0,0,0,0,0,0,SPELL_TYPE)
+    currentSpell = spellUIFont.render(SPELL_TYPE, True, colorSpell.color)
+
+    spellUI.blit(currentSpellMessage, (30,20))
+    spellUI.blit(currentSpell, (50, 45))
+        
+    screen.blit(spellUI, (SCREEN_WIDTH-210,20))
+
     
     pygame.display.flip()
     clock.tick(20)
