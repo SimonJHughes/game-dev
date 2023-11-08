@@ -37,6 +37,7 @@ SPELL_RADIUS = 5
 SPELL_AMT = 5
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+background = pygame.image.load("src/background.jpeg")
 
 #set font for lose message
 loserFont = pygame.font.Font('src/ENDOR.ttf', 50)
@@ -73,6 +74,7 @@ skeleton = Skeleton.Skeleton((100, 100))
 particles = []
 run = True
 while run:
+    screen.blit(background, (0, 0))
     clock.tick(FPS)
 	
     
