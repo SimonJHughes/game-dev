@@ -176,7 +176,11 @@ while run:
         screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
      
     for insight in item_entities:
+        
         screen.blit(insight.image, insight.rect)
+        
+
+    
     
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
     
