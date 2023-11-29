@@ -170,6 +170,10 @@ class Character(pygame.sprite.Sprite):
             self.update('right')
             self.direction = 'r'
 
+       
+            
+        
+
         #Part of in progress projectile work outside of game loop
 
         # if (keys[pygame.K_SPACE]):

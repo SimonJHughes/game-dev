@@ -6,6 +6,7 @@ import random
 import Insight
 import Bat
 import Slime
+import SmallSlime
 
 
 #TODO: 
@@ -70,6 +71,7 @@ spellUIFont =pygame.font.Font('src/ENDOR.ttf', 25)
 player = player.Character((400, 300))
 bat= Bat.Bat((0,200))
 slime=Slime.Slime((200,200))
+smallSlime=SmallSlime.SmallSlime((500,300),slime)
 first_skeleton = Skeleton.Skeleton((100, 100))
 enemies = [first_skeleton]
 dead_enemies = []
@@ -118,6 +120,8 @@ while run:
         if (event.type==pygame.KEYDOWN and event.key ==pygame.K_TAB):
                 SPELL_INDEX+= 1 
                 SPELL_TYPE= SPELL_TYPE_ARR[SPELL_INDEX%len(SPELL_TYPE_ARR)]
+        
+                
     
     ################RUDIMENTARY SPELL FUNCTIONALITY UNTIL I CAN GET IT TO WORK OUTSIDE OF GAME LOOP###########################
    
@@ -191,6 +195,9 @@ while run:
     ##BAT AND SLIME STARTER STUFF
     screen.blit(pygame.transform.scale(slime.image, (60,60)), slime.rect)
     slime.path_to_pos(player.rect.x, player.rect.y)
+
+    screen.blit(pygame.transform.scale(smallSlime.image, (60,60)), smallSlime.rect)
+    smallSlime.path_to_pos(player.rect.x, player.rect.y)
 
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
 

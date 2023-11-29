@@ -5,12 +5,12 @@ class Slime(pygame.sprite.Sprite):
     def __init__(self, position):
     
         #load image
-        choice= randint(1,4)
-        if(choice == 1):
+        self.choice= randint(1,4)
+        if(self.choice == 1):
             self.sheet = pygame.image.load("src/Slime_Medium_Blue.png")
-        elif(choice == 2):
+        elif(self.choice == 2):
             self.sheet = pygame.image.load("src/Slime_Medium_Green.png")
-        elif(choice == 3):
+        elif(self.choice == 3):
             self.sheet = pygame.image.load("src/Slime_Medium_Red.png")
         else:
             self.sheet = pygame.image.load("src/Slime_Medium_White.png")
