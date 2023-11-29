@@ -4,6 +4,8 @@ import spell
 import Skeleton
 import random
 import Insight
+import Bat
+import Slime
 
 
 #TODO: 
@@ -66,6 +68,8 @@ spellUIFont =pygame.font.Font('src/ENDOR.ttf', 25)
 		
 
 player = player.Character((400, 300))
+bat= Bat.Bat((0,200))
+slime=Slime.Slime((200,200))
 first_skeleton = Skeleton.Skeleton((100, 100))
 enemies = [first_skeleton]
 dead_enemies = []
@@ -182,9 +186,19 @@ while run:
 
     
     
+    
+
+    ##BAT AND SLIME STARTER STUFF
+    screen.blit(pygame.transform.scale(slime.image, (60,60)), slime.rect)
+    slime.path_to_pos(player.rect.x, player.rect.y)
+
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
+
+    screen.blit(pygame.transform.scale(bat.image, (60,60)), bat.rect)
+    bat.path_to_pos(player.rect.x, player.rect.y)
+
     
-    
+
     
     
 

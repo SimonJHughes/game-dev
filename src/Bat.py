@@ -7,10 +7,10 @@ class Bat(pygame.sprite.Sprite):
     
         #load image
         self.sheet = pygame.image.load("src/fly.png")
-        startX=14
-        startY=526
+        startX=11
+        startY=32
         #defines area of a single sprite of an image
-        self.sheet.set_clip(pygame.Rect(startX, startY+397, 34, 48))
+        self.sheet.set_clip(pygame.Rect(startX, startY, 30, 30))
         
         #loads spritesheet images
         self.image = self.sheet.subsurface(self.sheet.get_clip())
@@ -23,21 +23,21 @@ class Bat(pygame.sprite.Sprite):
         self.frame = 0
         
         
-        self.rectWidth = 34
-        self.rectHeight = 48
+        self.rectWidth = 30
+        self.rectHeight = 30
        
         
-        self.speed = 2
-        self.health = 30
+        self.speed = 4
+        self.health = 1
 
        
         
-        self.fly_states = { 0: (startX, startY+190, self.rectWidth, self.rectHeight), 1: (startX+64, startY+190, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+190, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+190, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+190, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+190, self.rectWidth, self.rectHeight), 6: (startX+64*6, startY+190, self.rectWidth, self.rectHeight), 7: (startX+64*7, startY+190, self.rectWidth, self.rectHeight), 8: (startX+64*7, startY+190, self.rectWidth, self.rectHeight) }
+        self.fly_states = { 0: (startX, startY, self.rectWidth, self.rectHeight), 1: (startX+44, startY, self.rectWidth, self.rectHeight), 2: (startX+44*2, startY, self.rectWidth, self.rectHeight), 3: (startX+44*3, startY, self.rectWidth, self.rectHeight), 4: (startX+44*4, startY, self.rectWidth, self.rectHeight), 5: (startX+44*5, startY, self.rectWidth, self.rectHeight), 6: (startX+44*6, startY, self.rectWidth, self.rectHeight)}
 
         self.death_states ={0: (startX, startY+768, self.rectWidth, self.rectHeight), 1: (startX+64, startY+768, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+768, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+768, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+768, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+768, self.rectWidth, self.rectHeight)}
 
-        self.rectWidth= 75
-        self.rectHeight=75
+        self.rectWidth= 30
+        self.rectHeight=30
         
         
     def takeDamage(self, spell):
@@ -49,7 +49,7 @@ class Bat(pygame.sprite.Sprite):
         startX=14
         startY=526
         #defines area of a single sprite of an image
-        self.sheet.set_clip(pygame.Rect(startX, startY+397, 34, 48))
+        self.sheet.set_clip(pygame.Rect(startX, startY, 34, 48))
         
         #loads spritesheet images
         self.image = self.sheet.subsurface(self.sheet.get_clip())
@@ -80,9 +80,34 @@ class Bat(pygame.sprite.Sprite):
     def update(self, direction):
         
         self.clip(self.fly_states)
-        self.rect.x += self.speed
-        if(self.rect.x>=800-self.rectWidth):
-            self.rect.x=800-self.rectWidth
+        
+        if direction == 'left':
+           
+            #animate rect coordinates
+            self.rect.x -= self.speed
+
+            if(self.rect.x<=0):
+                self.rect.x=0
+            
+            
+        if direction == 'right':
+            
+            self.rect.x += self.speed
+            if(self.rect.x>=800-self.rectWidth):
+                self.rect.x=800-self.rectWidth
+
+        if direction == 'up':
+            
+            self.rect.y -= self.speed
+            if(self.rect.y<=0):
+                self.rect.y=0
+        if direction == 'down':
+            
+
+            self.rect.y += self.speed
+            if(self.rect.y>=600-self.rectHeight):
+                self.rect.y=600-self.rectHeight
+        
 
 
         self.image = self.sheet.subsurface(self.sheet.get_clip())

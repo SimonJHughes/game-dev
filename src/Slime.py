@@ -1,15 +1,23 @@
 import pygame
-import time
+from random import randint
 
 class Slime(pygame.sprite.Sprite):
     def __init__(self, position):
     
         #load image
-        self.sheet = pygame.image.load("src/placeholder.png")
-        startX=14
-        startY=526
+        choice= randint(1,4)
+        if(choice == 1):
+            self.sheet = pygame.image.load("src/Slime_Medium_Blue.png")
+        elif(choice == 2):
+            self.sheet = pygame.image.load("src/Slime_Medium_Green.png")
+        elif(choice == 3):
+            self.sheet = pygame.image.load("src/Slime_Medium_Red.png")
+        else:
+            self.sheet = pygame.image.load("src/Slime_Medium_White.png")
+        startX=0
+        startY=0
         #defines area of a single sprite of an image
-        self.sheet.set_clip(pygame.Rect(startX, startY+397, 34, 48))
+        self.sheet.set_clip(pygame.Rect(startX, startY, 32, 32))
         
         #loads spritesheet images
         self.image = self.sheet.subsurface(self.sheet.get_clip())
@@ -22,40 +30,36 @@ class Slime(pygame.sprite.Sprite):
         self.frame = 0
         self.direction ='d'
         
-        self.rectWidth = 34
-        self.rectHeight = 48
+        self.rectWidth = 32
+        self.rectHeight = 32
        
         
-        self.speed = 2
-        self.health = 30
+        self.speed = 3
+        self.health = 20
 
        
-        self.down_idle_states= { 0: (startX, startY+127, self.rectWidth,  self.rectHeight)}
-        self.right_idle_states= { 0: (startX, startY+190, self.rectWidth,  self.rectHeight)}
-        self.left_idle_states = { 0: (startX, startY+61, self.rectWidth, self.rectHeight)}
-        self.up_idle_states= { 0: (startX, startY, self.rectWidth,  self.rectHeight) }    
+        
 
         
-        self.down_states ={ 0: (startX, startY+127, self.rectWidth,  self.rectHeight), 1: (startX+64, startY+127, self.rectWidth,  self.rectHeight), 2: (startX+64*2, startY+127, self.rectWidth,  self.rectHeight), 3:(startX+64*3, startY+127, self.rectWidth,  self.rectHeight), 4:(startX+64*4, startY+127, self.rectWidth,  self.rectHeight), 5:(startX+64*5, startY+127, self.rectWidth,  self.rectHeight), 6:(startX+64*6, startY+127, self.rectWidth,  self.rectHeight), 7:(startX+64*7, startY+127, self.rectWidth,  self.rectHeight), 8:(startX+64*8, startY+127, self.rectWidth,  self.rectHeight) }
-        self.up_states = { 0: (startX, startY, self.rectWidth, self.rectHeight), 1: (startX+64, startY, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY, self.rectWidth, self.rectHeight), 6: (startX+64*6, startY, self.rectWidth, self.rectHeight), 7: (startX+64*7, startY, self.rectWidth, self.rectHeight), 8: (startX+64*8, startY, self.rectWidth, self.rectHeight)}
-        self.left_states = { 0: (startX, startY+61, self.rectWidth, self.rectHeight), 1: (startX+64, startY+61, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+61, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+61, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+61, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+61, self.rectWidth, self.rectHeight), 6: (startX+64*6, startY+61, self.rectWidth, self.rectHeight), 7: (startX+64*7, startY+61, self.rectWidth, self.rectHeight), 8: (startX+64*7, startY+61, self.rectWidth, self.rectHeight) }
-        self.right_states = { 0: (startX, startY+190, self.rectWidth, self.rectHeight), 1: (startX+64, startY+190, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+190, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+190, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+190, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+190, self.rectWidth, self.rectHeight), 6: (startX+64*6, startY+190, self.rectWidth, self.rectHeight), 7: (startX+64*7, startY+190, self.rectWidth, self.rectHeight), 8: (startX+64*7, startY+190, self.rectWidth, self.rectHeight) }
+        self.down_states ={ 0: (startX, startY, self.rectWidth,  self.rectHeight), 1: (startX+32, startY, self.rectWidth,  self.rectHeight), 2: (startX+32*2, startY, self.rectWidth,  self.rectHeight), 3:(startX+32*3, startY, self.rectWidth,  self.rectHeight)}
+        self.up_states = { 0: (startX, startY+32*2, self.rectWidth,  self.rectHeight), 1: (startX+32, startY+32*2, self.rectWidth,  self.rectHeight), 2: (startX+32*2, startY+32*2, self.rectWidth,  self.rectHeight), 3:(startX+32*3, startY+32*2, self.rectWidth,  self.rectHeight)}
+        self.left_states = { 0: (startX, startY+32*3, self.rectWidth,  self.rectHeight), 1: (startX+32, startY+32*3, self.rectWidth,  self.rectHeight), 2: (startX+32*2, startY+32*3, self.rectWidth,  self.rectHeight), 3:(startX+32*3, startY+32*3, self.rectWidth,  self.rectHeight)}
+        self.right_states ={ 0: (startX, startY+32, self.rectWidth,  self.rectHeight), 1: (startX+32, startY+32, self.rectWidth,  self.rectHeight), 2: (startX+32*2, startY+32, self.rectWidth,  self.rectHeight), 3:(startX+32*3, startY+32, self.rectWidth,  self.rectHeight)}
 
-        self.death_states ={0: (startX, startY+768, self.rectWidth, self.rectHeight), 1: (startX+64, startY+768, self.rectWidth, self.rectHeight), 2: (startX+64*2, startY+768, self.rectWidth, self.rectHeight), 3: (startX+64*3, startY+768, self.rectWidth, self.rectHeight), 4: (startX+64*4, startY+768, self.rectWidth, self.rectHeight), 5: (startX+64*5, startY+768, self.rectWidth, self.rectHeight)}
+        #self.death_states
 
-        self.rectWidth= 75
-        self.rectHeight=75
+       
         
         
     def takeDamage(self, spell):
         
             self.health -=spell.damage
         
-    def die(self):
-        for i in range (0,6):
-            self.sheet.set_clip(pygame.Rect(self.death_states[i]))
-            self.image = self.sheet.subsurface(self.sheet.get_clip())
-            i+=1
+    # def die(self):
+    #     for i in range (0,6):
+    #         self.sheet.set_clip(pygame.Rect(self.death_states[i]))
+    #         self.image = self.sheet.subsurface(self.sheet.get_clip())
+    #         i+=1
 
     def get_frame(self, frame_set):
         #looping the sprite sequences.
@@ -102,14 +106,7 @@ class Slime(pygame.sprite.Sprite):
             if(self.rect.y>=600-self.rectHeight):
                 self.rect.y=600-self.rectHeight
 
-        if direction == 'stand_left':
-            self.clip(self.left_idle_states)
-        if direction == 'stand_right':
-            self.clip(self.right_idle_states)
-        if direction == 'stand_up':
-            self.clip(self.up_idle_states)
-        if direction == 'stand_down':
-            self.clip(self.down_idle_states)
+        
 
         self.image = self.sheet.subsurface(self.sheet.get_clip())
         
@@ -135,13 +132,4 @@ class Slime(pygame.sprite.Sprite):
 
         
         
-       
-    def idle(self):
-        if (self.direction == 'd'):
-            self.update('stand_down')
-        if (self.direction == 'u'):
-            self.update('stand_up')
-        if (self.direction == 'r'):
-            self.update('stand_right')
-        if (self.direction == 'l'):
-            self.update('stand_left')
+ 
