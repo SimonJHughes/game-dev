@@ -7,6 +7,7 @@ import Insight
 import Bat
 import Slime
 import SmallSlime
+import BringerOfDeath
 
 
 #TODO: 
@@ -72,6 +73,7 @@ player = player.Character((400, 300))
 bat= Bat.Bat((0,200))
 slime=Slime.Slime((200,200))
 smallSlime=SmallSlime.SmallSlime((500,300),slime)
+boss = BringerOfDeath.BringerOfDeath((500,500))
 first_skeleton = Skeleton.Skeleton((100, 100))
 enemies = [first_skeleton]
 dead_enemies = []
@@ -192,7 +194,17 @@ while run:
     
     
 
-    ##BAT AND SLIME STARTER STUFF
+    ##BAT, SLIME, BOSS STARTER STUFF
+    
+    screen.blit(pygame.transform.scale(boss.image, (300,300)), boss.rect)
+    if(pygame.Rect.colliderect(player.rect, boss.rect)):
+        boss.attack()
+    
+    else:
+        boss.path_to_pos(player.rect.x, player.rect.y)
+
+
+
     screen.blit(pygame.transform.scale(slime.image, (60,60)), slime.rect)
     slime.path_to_pos(player.rect.x, player.rect.y)
 
