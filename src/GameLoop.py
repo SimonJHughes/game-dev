@@ -196,12 +196,7 @@ while run:
 
     ##BAT, SLIME, BOSS STARTER STUFF
     
-    screen.blit(pygame.transform.scale(boss.image, (300,300)), boss.rect)
-    if(pygame.Rect.colliderect(player.rect, boss.rect)):
-        boss.attack()
     
-    else:
-        boss.path_to_pos(player.rect.x, player.rect.y)
 
 
 
@@ -215,6 +210,13 @@ while run:
 
     screen.blit(pygame.transform.scale(bat.image, (60,60)), bat.rect)
     bat.path_to_pos(player.rect.x, player.rect.y)
+
+    screen.blit(pygame.transform.scale(boss.image, (300,300)), boss.rect)
+    if(pygame.Rect.colliderect(player.rect, boss.rect)):
+        boss.attack()
+    
+    else:
+        boss.path_to_pos(player.rect.x, player.rect.y)
 
     
 
