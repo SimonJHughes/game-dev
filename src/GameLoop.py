@@ -9,6 +9,36 @@ import Slime
 import SmallSlime
 import BringerOfDeath
 
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+class Button:
+    def __init__(self, text, x, y, width, height, color, hover_color, action):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.color = color
+        self.hover_color = hover_color
+        self.action = action
+
+    def draw(self, surface):
+        pygame.draw.rect(surface, self.color, self.rect)
+        self.check_hover()
+        self.draw_text(surface)
+
+    def check_hover(self):
+        mouse_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse_pos):
+            self.color = self.hover_color
+        else:
+            self.color = BLACK
+
+    def draw_text(self, surface):
+        text_surface = spellUIFont.render(self.text, True, WHITE)
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        surface.blit(text_surface, text_rect)
+        
+
+
 
 #TODO: 
 #
@@ -39,6 +69,11 @@ SPELL_TYPE_ARR = ['light', 'dark', 'fire', 'poison', 'water']
 SPELL_INDEX =0
 SPELL_TYPE = SPELL_TYPE_ARR[SPELL_INDEX]
 SPELL_RADIUS = 5
+
+button1 = Button("Speed", SCREEN_WIDTH // 2 - 100, 200, 200, 50, BLACK, WHITE, lambda: print("Button 1 clicked"))
+button2 = Button("Health", SCREEN_WIDTH // 2 - 100, 300, 200, 50, BLACK, WHITE, lambda: print("Button 2 clicked"))
+button3 = Button("Ammo", SCREEN_WIDTH // 2 - 100, 400, 200, 50, BLACK, WHITE, lambda: print("Button 3 clicked"))
+button4 = Button("Done", SCREEN_WIDTH // 2 - 100, 500, 200, 50, BLACK, WHITE, lambda: print("Button 3 clicked"))
 
 
 SPELL_AMT = 5
@@ -116,7 +151,12 @@ total_slimes = 0
 slimes_spawned = 0
 
 current_wave = 1
+show_menu = False
 change_wave = False
+
+speed_cost = 1
+health_cost = 1
+ammo_cost = 1
 
 while run:
     
@@ -141,10 +181,7 @@ while run:
             total_slimes = 2
         if(current_wave == 3):
             total_bats = 2
-    
-
-   
-	
+            
     for event in pygame.event.get():
         if(event.type == pygame.QUIT):
             run = False
@@ -161,10 +198,30 @@ while run:
             slimes_spawned += 1
             pygame.time.set_timer(spawn_slime, int(slime_interval * 0.5))
         if(event.type == wavecheck and len(dead_enemies) == total_skeletons + total_bats + total_slimes):
-            change_wave = True
+            show_menu = True
         if (event.type==pygame.KEYDOWN and event.key ==pygame.K_TAB):
                 SPELL_INDEX+= 1 
                 SPELL_TYPE= SPELL_TYPE_ARR[SPELL_INDEX%len(SPELL_TYPE_ARR)]
+        if(event.type == pygame.MOUSEBUTTONDOWN):
+            if show_menu:
+                if button1.rect.collidepoint(pygame.mouse.get_pos()):
+                    if(total_insight >= speed_cost):
+                        total_insight -= speed_cost
+                        speed_cost *= 2
+                        player.speed += 1
+                elif button2.rect.collidepoint(pygame.mouse.get_pos()):
+                    if(total_insight >= health_cost):
+                        total_insight -= health_cost
+                        health_cost *= 2
+                        player.health += 5
+                elif button3.rect.collidepoint(pygame.mouse.get_pos()):
+                    if(total_insight >= ammo_cost):
+                        total_insight -= ammo_cost
+                        ammo_cost *= 2
+                        SPELL_AMT += 1
+                elif button4.rect.collidepoint(pygame.mouse.get_pos()):
+                    change_wave = True
+                    show_menu = False
         
                 
     
@@ -309,8 +366,16 @@ while run:
     waveUI.blit(currentWaveMessage, (0, 10))
     screen.blit(waveUI, (300, 10))
     
+    if(show_menu):
+        button1.draw(screen)
+        button2.draw(screen)
+        button3.draw(screen)
+        button4.draw(screen)
+    
     pygame.display.flip()
     clock.tick(20)
     screen.fill((0,0,0))
+    
+    
 
 pygame.quit()
