@@ -30,6 +30,7 @@ class BringerOfDeath(pygame.sprite.Sprite):
         
         self.speed = 2
         self.health = 100
+        self.maxHealth=100
 
        
         

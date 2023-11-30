@@ -18,6 +18,7 @@ class SmallSlime(Slime.Slime):
         startY=0
         #defines area of a single sprite of an image
         self.sheet.set_clip(pygame.Rect(startX, startY, 32, 32))
+        self.choice = slime.choice
         
         #loads spritesheet images
         self.image = self.sheet.subsurface(self.sheet.get_clip())
@@ -35,7 +36,8 @@ class SmallSlime(Slime.Slime):
        
         
         self.speed = 4
-        self.health = 20
+        self.health = 10
+        self.maxHealth=10
 
        
         

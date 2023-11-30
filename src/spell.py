@@ -10,10 +10,11 @@ class Particle(object):
         self.distance = distance
         self.spellType = spellType
         self.radius = radius
+        self.spellType = spellType
         self.rect = pygame.Rect((self.x,self.y, self.radius*2,self.radius*2))
         if (spellType == 'fire'):
             self.color = ((235, 27, 12))
-            self.damage = 5
+            self.damage = 4
 
         elif (spellType == 'light'):
             self.color = ((255, 255, 255))
@@ -29,7 +30,7 @@ class Particle(object):
 
         elif (spellType == 'water'):
             self.color = ((20, 141, 227))
-            self.damage = 2
+            self.damage = 4
 
         else:
             self.color= ((148, 3, 10))

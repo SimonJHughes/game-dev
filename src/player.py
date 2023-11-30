@@ -96,6 +96,7 @@ class Character(pygame.sprite.Sprite):
         elif (enemy == 'boss'):
             self.health -= 10
         
+        
     def die(self):
         for i in range (0,3):
             self.sheet.set_clip(pygame.Rect(self.death_states[i]))

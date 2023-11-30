@@ -150,7 +150,7 @@ bats_spawned = 0
 total_slimes = 0
 slimes_spawned = 0
 
-current_wave = 3
+current_wave = 1
 show_menu = False
 change_wave = False
 
@@ -242,10 +242,10 @@ while run:
                 #draw skeleton health bar when it takes damage
                 particle.rect = (pygame.Rect(-1000, -1000, 0, 0))
                 if skeleton.health>0:
-                    pygame.draw.rect(screen, (0,255,0),(skeleton.rect.x+3,skeleton.rect.y-7, 30,7))
-                    pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30-skeleton.health),skeleton.rect.y-7, (30-skeleton.health),7))
+                    pygame.draw.rect(screen, (0,255,0),(skeleton.rect.x+3,skeleton.rect.y-7, skeleton.maxHealth,7))
+                    pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+skeleton.maxHealth+3)-(skeleton.maxHealth-skeleton.health),skeleton.rect.y-7, (skeleton.maxHealth-skeleton.health),7))
                 else:
-                    pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+33)-(30),skeleton.rect.y-7, (30),7))
+                    pygame.draw.rect(screen, (255,0,0), ((skeleton.rect.x+skeleton.maxHealth+3)-(skeleton.health),skeleton.rect.y-7, (skeleton.maxHealth),7))
                 skeleton.takeDamage(particle)
                 
     for insight in item_entities:
@@ -309,6 +309,11 @@ while run:
 
     for skeleton in enemies:
         if(skeleton.health<=0):
+            if(isinstance(skeleton, SmallSlime.SmallSlime)):
+                pass
+            elif(isinstance(skeleton, Slime.Slime)):
+                enemies.append(SmallSlime.SmallSlime((skeleton.rect.x-10, skeleton.rect.y),skeleton))
+                enemies.append(SmallSlime.SmallSlime((skeleton.rect.x+10, skeleton.rect.y), skeleton))
             skeleton.die()
             item_entities.append(Insight.Insight(skeleton.rect.x + 20, skeleton.rect.y + 25))
             dead_enemies.append(skeleton)

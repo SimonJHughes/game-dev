@@ -29,6 +29,7 @@ class Bat(pygame.sprite.Sprite):
         
         self.speed = 7
         self.health = 1
+        self.maxHealth=1
 
        
         

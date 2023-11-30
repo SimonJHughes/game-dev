@@ -28,6 +28,7 @@ class Skeleton(pygame.sprite.Sprite):
         
         self.speed = 2
         self.health = 30
+        self.maxHealth=30
 
        
         self.down_idle_states= { 0: (startX, startY+127, self.rectWidth,  self.rectHeight)}
@@ -48,7 +49,9 @@ class Skeleton(pygame.sprite.Sprite):
         
         
     def takeDamage(self, spell):
-        
+        if(spell.spellType == 'poison'):
+            self.health -=(spell.damage +4)
+        else:
             self.health -=spell.damage
         
     def die(self):

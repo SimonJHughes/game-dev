@@ -36,6 +36,7 @@ class Slime(pygame.sprite.Sprite):
         
         self.speed = 3
         self.health = 20
+        self.maxHealth=20
 
        
         
@@ -53,9 +54,16 @@ class Slime(pygame.sprite.Sprite):
         
         
     def takeDamage(self, spell):
-        
+        if(spell.spellType == 'fire' and self.choice == 1):
+            self.health -=(spell.damage +4)
+        elif(spell.spellType == 'water' and self.choice == 3):
+            self.health -=(spell.damage +4)
+        elif(spell.spellType == 'water' and self.choice == 1):
+            self.health -=(spell.damage -3)
+        elif(spell.spellType == 'fire' and self.choice == 3):
+            self.health -=(spell.damage -3)
+        else:
             self.health -=spell.damage
-        
     # def die(self):
     #     for i in range (0,6):
     #         self.sheet.set_clip(pygame.Rect(self.death_states[i]))
