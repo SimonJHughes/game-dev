@@ -70,10 +70,6 @@ spellUIFont =pygame.font.Font('src/ENDOR.ttf', 25)
 		
 
 player = player.Character((400, 300))
-bat= Bat.Bat((0,200))
-slime=Slime.Slime((200,200))
-smallSlime=SmallSlime.SmallSlime((500,300),slime)
-boss = BringerOfDeath.BringerOfDeath((500,500))
 first_skeleton = Skeleton.Skeleton((100, 100))
 enemies = [first_skeleton]
 dead_enemies = []
@@ -93,23 +89,58 @@ item_entities = []
 particles = []
 run = True
 
-timer_interval = 10000
+skeleton_interval = 10000
 spawn_skeleton = pygame.USEREVENT + 1
-pygame.time.set_timer(spawn_skeleton, timer_interval)
+pygame.time.set_timer(spawn_skeleton, skeleton_interval)
+
+bat_interval = 5000
+spawn_bat = pygame.USEREVENT + 2
+pygame.time.set_timer(spawn_bat, bat_interval)
+
+slime_interval = 7500
+spawn_slime = pygame.USEREVENT + 3
+pygame.time.set_timer(spawn_slime, slime_interval)
+
+wavecheck_interval = 2000
+wavecheck = pygame.USEREVENT + 4
+pygame.time.set_timer(wavecheck, wavecheck_interval)
+
+
+total_skeletons = 2
+skeletons_spawned = 1
+
+total_bats = 0
+bats_spawned = 0
+
+total_slimes = 0
+slimes_spawned = 0
+
+current_wave = 1
+change_wave = False
 
 while run:
     
     screen.blit(background, (-100, 0))
     clock.tick(FPS)
-
    
-    
-	
-    
-    
-	
     keys = pygame.key.get_pressed()
     
+    #If all enemies are dead, change waves
+    if(change_wave):
+        change_wave = False
+        dead_enemies.clear()
+        current_wave += 1
+        skeletons_spawned = 0
+        bats_spawned = 0
+        slimes_spawned = 0
+        
+        total_skeletons *= 2
+        total_bats *= 2
+        total_slimes *= 2
+        if(current_wave == 2):
+            total_slimes = 2
+        if(current_wave == 3):
+            total_bats = 2
     
 
    
@@ -117,8 +148,20 @@ while run:
     for event in pygame.event.get():
         if(event.type == pygame.QUIT):
             run = False
-        if(event.type == spawn_skeleton):
+        if(event.type == spawn_skeleton and not (skeletons_spawned >= total_skeletons)):
             enemies.append(Skeleton.Skeleton((random.randint(100, 700), random.randint(100, 600))))
+            skeletons_spawned += 1
+            pygame.time.set_timer(spawn_skeleton, int(skeleton_interval * 0.5))
+        if(event.type == spawn_bat and not (bats_spawned >= total_bats)):
+            enemies.append(Bat.Bat((random.randint(100, 700), random.randint(100, 600))))
+            bats_spawned += 1
+            pygame.time.set_timer(spawn_bat, int(bat_interval * 0.5))
+        if(event.type == spawn_slime and not (slimes_spawned >= total_slimes)):
+            enemies.append(Slime.Slime((random.randint(100, 700), random.randint(100, 600))))
+            slimes_spawned += 1
+            pygame.time.set_timer(spawn_slime, int(slime_interval * 0.5))
+        if(event.type == wavecheck and len(dead_enemies) == total_skeletons + total_bats + total_slimes):
+            change_wave = True
         if (event.type==pygame.KEYDOWN and event.key ==pygame.K_TAB):
                 SPELL_INDEX+= 1 
                 SPELL_TYPE= SPELL_TYPE_ARR[SPELL_INDEX%len(SPELL_TYPE_ARR)]
@@ -186,54 +229,19 @@ while run:
         screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
      
     for insight in item_entities:
-        
         screen.blit(insight.image, insight.rect)
         
-
-    
-    
-    
-
-    ##BAT, SLIME, BOSS STARTER STUFF
-    
-    
-
-
-
-    screen.blit(pygame.transform.scale(slime.image, (60,60)), slime.rect)
-    slime.path_to_pos(player.rect.x, player.rect.y)
-
-    screen.blit(pygame.transform.scale(smallSlime.image, (60,60)), smallSlime.rect)
-    smallSlime.path_to_pos(player.rect.x, player.rect.y)
-
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
-
-    screen.blit(pygame.transform.scale(bat.image, (60,60)), bat.rect)
-    bat.path_to_pos(player.rect.x, player.rect.y)
-
-    screen.blit(pygame.transform.scale(boss.image, (300,300)), boss.rect)
-    if(pygame.Rect.colliderect(player.rect, boss.rect)):
-        boss.attack()
-    
-    else:
-        boss.path_to_pos(player.rect.x, player.rect.y)
-
-    
-
-    
-    
-
-    
-            
-       
-
-  
-    
 
     
     for skeleton in enemies:
         if (pygame.Rect.colliderect(player.rect, skeleton.rect) and skeleton.health > 0):
-            player.takeDamage('skeleton')
+            if(isinstance(skeleton, Skeleton.Skeleton)): 
+                player.takeDamage('skeleton')
+            elif(isinstance(skeleton, Slime.Slime)):
+                player.takeDamage('slime')
+            elif(isinstance(skeleton, Bat.Bat)):
+                player.takeDamage('bat')
 
     for skeleton in enemies:
         if(skeleton.health<=0):
@@ -292,9 +300,17 @@ while run:
     insightUI.blit(currentInsightMessage, (0, 0))
     screen.blit(insightUI, (10, 10))
     
+    #Wave
+    waveUI = pygame.Surface((200,50))  
+    waveUI.set_alpha(128)              
+    waveUI.fill((217, 201, 156))
+    currentWaveMessage = spellUIFont.render(f'Wave: {current_wave}', True, (148, 3, 10))
+    
+    waveUI.blit(currentWaveMessage, (0, 10))
+    screen.blit(waveUI, (300, 10))
+    
     pygame.display.flip()
     clock.tick(20)
     screen.fill((0,0,0))
-    
 
 pygame.quit()

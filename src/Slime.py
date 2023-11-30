@@ -48,7 +48,8 @@ class Slime(pygame.sprite.Sprite):
 
         #self.death_states
 
-       
+    def die(self):
+        self.speed = self.speed
         
         
     def takeDamage(self, spell):

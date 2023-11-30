@@ -45,20 +45,7 @@ class Bat(pygame.sprite.Sprite):
             self.health -=spell.damage
         
     def die(self):
-        self.sheet = pygame.image.load("src/batDeath.png")
-        startX=14
-        startY=526
-        #defines area of a single sprite of an image
-        self.sheet.set_clip(pygame.Rect(startX, startY, 34, 48))
-        
-        #loads spritesheet images
-        self.image = self.sheet.subsurface(self.sheet.get_clip())
-        self.rect = self.image.get_rect()
-
-        for i in range (0,6):
-            self.sheet.set_clip(pygame.Rect(self.death_states[i]))
-            self.image = self.sheet.subsurface(self.sheet.get_clip())
-            i+=1
+        self.speed = self.speed
 
     def get_frame(self, frame_set):
         #looping the sprite sequences.

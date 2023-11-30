@@ -88,7 +88,13 @@ class Character(pygame.sprite.Sprite):
 
     def takeDamage(self, enemy):
         if (enemy == 'skeleton'):
-            self.health -=1
+            self.health -= 2
+        elif (enemy == 'bat'):
+            self.health -= 1
+        elif (enemy == 'slime'):
+            self.health -= 3
+        elif (enemy == 'boss'):
+            self.health -= 10
         
     def die(self):
         for i in range (0,3):
