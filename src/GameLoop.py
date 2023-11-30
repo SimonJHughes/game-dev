@@ -201,7 +201,7 @@ while run:
             enemies.append(Slime.Slime((random.randint(100, 700), random.randint(100, 600))))
             slimes_spawned += 1
             pygame.time.set_timer(spawn_slime, int(slime_interval * 0.5))
-        if(event.type == wavecheck and len(dead_enemies) == total_skeletons + total_bats + total_slimes):
+        if(event.type == wavecheck and len(dead_enemies) >= total_bats + total_skeletons + total_slimes * 2 + total_slimes):
             show_menu = True
         if (event.type==pygame.KEYDOWN and event.key ==pygame.K_TAB):
                 SPELL_INDEX+= 1 
@@ -288,7 +288,7 @@ while run:
    
     for skeleton in enemies:
         if(isinstance(skeleton, BringerOfDeath.BringerOfDeath)):
-            screen.blit(skeleton.image, skeleton.rect)
+            screen.blit(pygame.transform.scale(skeleton.image, (400, 400)), skeleton.rect)
         else:
             screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
      
