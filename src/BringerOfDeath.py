@@ -15,6 +15,8 @@ class BringerOfDeath(pygame.sprite.Sprite):
         self.image = self.sheet.subsurface(self.sheet.get_clip())
         self.rect = self.image.get_rect()
         
+        self.image = pygame.transform.scale(self.image, (600, 600))
+        
         #position image in the screen surface
         self.rect.topleft = position
         

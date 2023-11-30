@@ -150,13 +150,15 @@ bats_spawned = 0
 total_slimes = 0
 slimes_spawned = 0
 
-current_wave = 1
+current_wave = 3
 show_menu = False
 change_wave = False
 
 speed_cost = 1
 health_cost = 1
 ammo_cost = 1
+
+max_particles = 5
 
 while run:
     
@@ -174,13 +176,15 @@ while run:
         bats_spawned = 0
         slimes_spawned = 0
         
-        total_skeletons *= 2
-        total_bats *= 2
-        total_slimes *= 2
+        total_skeletons *= 1
+        total_bats *= 1
+        total_slimes *= 1
         if(current_wave == 2):
             total_slimes = 2
         if(current_wave == 3):
             total_bats = 2
+        if(current_wave == 4):
+            enemies.append(BringerOfDeath.BringerOfDeath((1000, 300)))
             
     for event in pygame.event.get():
         if(event.type == pygame.QUIT):
@@ -218,7 +222,7 @@ while run:
                     if(total_insight >= ammo_cost):
                         total_insight -= ammo_cost
                         ammo_cost *= 2
-                        SPELL_AMT += 1
+                        max_particles += 1
                 elif button4.rect.collidepoint(pygame.mouse.get_pos()):
                     change_wave = True
                     show_menu = False
@@ -257,7 +261,7 @@ while run:
     if (keys[pygame.K_SPACE]):
         if(SPELL_TYPE == 'dark'):
             player.health-=1
-        if len(particles)<5:
+        if len(particles)< max_particles:
             SPELL_XSPEED=0
             SPELL_YSPEED=0
             if player.direction == 'r':
@@ -283,7 +287,10 @@ while run:
         screen.blit(pygame.transform.scale(dead_enemy.image, (50, 60)), dead_enemy.rect)
    
     for skeleton in enemies:
-        screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
+        if(isinstance(skeleton, BringerOfDeath.BringerOfDeath)):
+            screen.blit(skeleton.image, skeleton.rect)
+        else:
+            screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
      
     for insight in item_entities:
         screen.blit(insight.image, insight.rect)
