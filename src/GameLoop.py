@@ -108,7 +108,6 @@ player = player.Character((400, 300))
 first_skeleton = Skeleton.Skeleton((100, 100))
 enemies = [first_skeleton]
 bosses = []
-bosses.append(BringerOfDeath.BringerOfDeath((1000, 300)))
 dead_enemies = []
 dead_bosses = []
 
@@ -144,7 +143,7 @@ wavecheck = pygame.USEREVENT + 4
 pygame.time.set_timer(wavecheck, wavecheck_interval)
 
 
-total_skeletons = 1
+total_skeletons = 2
 skeletons_spawned = 1
 
 total_bats = 0
@@ -158,7 +157,7 @@ show_menu = False
 change_wave = False
 
 speed_cost = 1
-health_cost = 1
+health_cost = 5
 ammo_cost = 1
 
 
@@ -183,6 +182,7 @@ while run:
         dead_enemies.clear()
         dead_bosses.clear()
         current_wave += 1
+        
         skeletons_spawned = 0
         bats_spawned = 0
         slimes_spawned = 0
@@ -195,7 +195,7 @@ while run:
         if(current_wave == 3):
             total_bats = 2
         if(current_wave == 4):
-            bosses.append(BringerOfDeath.BringerOfDeath((1000, 300)))
+            bosses.append(BringerOfDeath.BringerOfDeath((600, 200)))
             
     for event in pygame.event.get():
         if(event.type == pygame.QUIT):
@@ -227,8 +227,8 @@ while run:
                 elif button2.rect.collidepoint(pygame.mouse.get_pos()):
                     if(total_insight >= health_cost):
                         total_insight -= health_cost
-                        health_cost *= 2
-                        player.health += 5
+                        health_cost = 5
+                        player.health = 40
                 elif button3.rect.collidepoint(pygame.mouse.get_pos()):
                     if(total_insight >= ammo_cost):
                         total_insight -= ammo_cost
