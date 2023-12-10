@@ -18,6 +18,7 @@ class Bat(pygame.sprite.Sprite):
         
         #position image in the screen surface
         self.rect.topleft = position
+        self.rect = pygame.Rect(self.rect.left, self.rect.top, self.rect.width + 10, self.rect.height + 20)
         
         #variable for looping the frame sequence
         self.frame = 0

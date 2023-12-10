@@ -17,6 +17,7 @@ class Skeleton(pygame.sprite.Sprite):
         
         #position image in the screen surface
         self.rect.topleft = position
+        self.rect = pygame.Rect(self.rect.left, self.rect.top, self.rect.width + 30, self.rect.width + 45)
         
         #variable for looping the frame sequence
         self.frame = 0

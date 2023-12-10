@@ -20,6 +20,7 @@ class Character(pygame.sprite.Sprite):
         
         #position image in the screen surface
         self.rect.topleft = position
+        self.rect = pygame.Rect(position[0] + 50, position[1], self.rect.width + 20, self.rect.height + 40)
         
         self.health =40
         

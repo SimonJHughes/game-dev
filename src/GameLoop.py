@@ -144,7 +144,7 @@ pygame.time.set_timer(wavecheck, wavecheck_interval)
 total_skeletons = 2
 skeletons_spawned = 1
 
-total_bats = 0
+total_bats = 1
 bats_spawned = 0
 
 total_slimes = 0
@@ -273,7 +273,7 @@ while run:
             elif player.direction =='d':
                 SPELL_YSPEED=20
 
-            particles.append(spell.Particle(round(player.rect.x + player.rect.width), round(player.rect.y + player.rect.height), SPELL_DISTANCE, SPELL_RADIUS, SPELL_XSPEED, SPELL_YSPEED, SPELL_TYPE))
+            particles.append(spell.Particle(round(player.rect.x + player.rect.width - 10), round(player.rect.y + player.rect.height - 25), SPELL_DISTANCE, SPELL_RADIUS, SPELL_XSPEED, SPELL_YSPEED, SPELL_TYPE))
             
     ########################################################################################
         
