@@ -29,9 +29,9 @@ class BringerOfDeath(pygame.sprite.Sprite):
         self.rectHeight = 85
        
         
-        self.speed = 2
-        self.health = 100
-        self.maxHealth=100
+        self.speed = 3
+        self.health = 170
+        self.maxHealth=170
         self.isDead = False
         self.isSuperDead = False
         
@@ -53,14 +53,16 @@ class BringerOfDeath(pygame.sprite.Sprite):
         
         
 
-        self.death_states ={0: (341, 291, self.rectWidth, self.rectHeight), 1: (481, 291, self.rectWidth, self.rectHeight), 2: (622, 291, self.rectWidth, self.rectHeight), 3: (759, 291, self.rectWidth, self.rectHeight), 4: (901, 291, self.rectWidth, self.rectHeight), 5: (1032, 291, self.rectWidth, self.rectHeight), 6:(67,380,self.rectWidth,self.rectHeight), 7: (204, 380, self.rectWidth, self.rectHeight), 8: (340,380, self.rectWidth, self.rectHeight), 9: (480,380,self.rectWidth,self.rectHeight), 10: (619,380,self.rectWidth,self.rectHeight), 11: (762,380,self.rectWidth,self.rectHeight), 12: (900,380,self.rectWidth,self.rectHeight)}
+        self.death_states ={0: (341, 291, self.rectWidth, self.rectHeight), 1: (481, 291, self.rectWidth, self.rectHeight), 2: (622, 291, self.rectWidth, self.rectHeight), 3: (759, 291, self.rectWidth, self.rectHeight), 4: (901, 291, self.rectWidth, self.rectHeight), 5: (1032, 291, self.rectWidth, self.rectHeight), 6:(67,380,self.rectWidth,self.rectHeight), 7: (204, 380, self.rectWidth, self.rectHeight), 8: (340,380, self.rectWidth, self.rectHeight), 9: (480,380,self.rectWidth,self.rectHeight), 10: (619,380,self.rectWidth,self.rectHeight), 11: (762,380,self.rectWidth,self.rectHeight), 12: (900,380,self.rectWidth,self.rectHeight), 13: (0,0,0,0)}
         
         
         
         
     def takeDamage(self, spell):
-        
-            self.health -=spell.damage
+            if (spell.spellType == 'light'):
+                self.health-=spell.damage+5
+            else:
+                self.health -=spell.damage
         
     def die(self):
         self.frame = -1

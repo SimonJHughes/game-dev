@@ -22,7 +22,7 @@ class Particle(object):
 
         elif (spellType == 'dark'):
             self.color = ((0, 0, 0))
-            self.damage = 7
+            self.damage = 9
 
         elif (spellType == 'poison'):
             self.color = ((9, 148, 37))

@@ -422,11 +422,22 @@ while run:
     currentSpellMessage = spellUIFont.render('Current Spell:', True, (148, 3, 10))
     colorSpell = spell.Particle(0,0,0,0,0,0,SPELL_TYPE)
     currentSpell = spellUIFont.render(SPELL_TYPE, True, colorSpell.color)
-
     spellUI.blit(currentSpellMessage, (30,20))
-    spellUI.blit(currentSpell, (50, 45))
-        
+    spellUI.blit(currentSpell,(50,45))
     screen.blit(spellUI, (SCREEN_WIDTH-210,20))
+
+    for boss in bosses:
+        if(current_wave == 4 and not boss.isSuperDead):
+            bossUI = pygame.Surface((526,75))  
+            bossUI.set_alpha(128)              
+            bossUI.fill((217, 201, 156))
+            pygame.draw.rect(bossUI, (0,255,0),(10,50, boss.maxHealth*3,20))
+            pygame.draw.rect(bossUI, (255,0,0), ((10+boss.maxHealth*3)- (boss.maxHealth*3-boss.health*3),50 , (boss.maxHealth*3-boss.health*3),20))
+            bossMessage = spellUIFont.render('Bringer of Death:', True, (148, 3, 10))
+            bossUI.blit(bossMessage, (150,0))
+            screen.blit(bossUI, (137,500))
+        
+    
 
     #Insight
     insightUI = pygame.Surface((200,50))  
