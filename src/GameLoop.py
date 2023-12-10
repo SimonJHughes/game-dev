@@ -5,6 +5,7 @@ import Skeleton
 import random
 import Insight
 import Bat
+import Mud
 import Slime
 import SmallSlime
 import BringerOfDeath
@@ -40,16 +41,7 @@ class Button:
 
 
 
-#TODO: 
-#
-#      Put more of spell shooting functionality in player and Spell files. The bones are still there,
-#      just get them to work
-#
-#      Create a draw health bar function to clean up gross pygame.draw.rect calls in gameLoop.
-#
-#      Put in a background: Tile program? Seems to be what everyone else in the class is using.
-#
-#      Add particle effects and sprites to spells, not just different colored circles.
+
 
 pygame.init()
 
@@ -81,6 +73,8 @@ SPELL_AMT = 5
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 background = pygame.image.load("src/background.jpeg")
+
+
 
 #set font for lose message
 loserFont = pygame.font.Font('src/ENDOR.ttf', 50)
@@ -115,6 +109,8 @@ dead_bosses = []
 #Array storing insight entities
 total_insight = 0
 item_entities = []
+#mud array
+muds = []
 
 
 #Relics of an ancient time. May be brought back to life? Must try to implement spell firing outside of gameLoop
@@ -181,22 +177,28 @@ while run:
     if(change_wave):
         change_wave = False
         dead_enemies.clear()
+        muds.clear()
         dead_bosses.clear()
         current_wave += 1
         
         skeletons_spawned = 0
         bats_spawned = 0
         slimes_spawned = 0
+        oldSpeed =player.speed
+        
         
         total_skeletons *= 2
         total_bats *= 2
         total_slimes *= 2
-        if(current_wave == 2):
+        muds.append(Mud.Mud((random.randint(0,800),random.randint(0,600))))
+        
+        if(current_wave == 2): 
             total_slimes = 2
         if(current_wave == 3):
+            
             total_bats = 2
         if(current_wave == 4):
-            bosses.append(BringerOfDeath.BringerOfDeath((600, 200)))
+            bosses.append(BringerOfDeath.BringerOfDeath((1000, 200)))
             
     for event in pygame.event.get():
         if(event.type == pygame.QUIT):
@@ -300,7 +302,8 @@ while run:
 
     
 
-
+    for mud in muds:
+        screen.blit(pygame.transform.scale(mud.image, (mud.rect.width, mud.rect.height)), mud.rect)
     
     
     for dead_enemy in dead_enemies:
@@ -313,10 +316,37 @@ while run:
         
    
     for skeleton in enemies:
+        
         screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
      
     for insight in item_entities:
         screen.blit(insight.image, insight.rect)
+
+    
+    print(len(bosses))
+    for boss in bosses:
+        screen.blit(pygame.transform.scale(boss.image, (400, 400)), boss.rect)
+        
+        boss.path_to_pos(player.rect.left - 200, player.rect.top - 200)
+        now = pygame.time.get_ticks()
+        
+        if(taking_damage and now - time_since_hit >= 300):
+            taking_damage = False
+            player.takeDamage('boss')
+        
+        if(pygame.Rect.colliderect(player.rect, boss.strikezone) and now - boss_last_hit >= boss_cooldown):
+            boss_last_hit = now
+            boss.attack()
+            taking_damage = True
+            time_since_hit = pygame.time.get_ticks()
+            
+        if(boss.health <= 0):
+            boss.die()
+            dead_bosses.append(boss)
+            bosses.remove(boss)
+            
+
+        
         
     for boss in bosses:
         screen.blit(pygame.transform.scale(boss.image, (400, 400)), boss.rect)
@@ -343,6 +373,15 @@ while run:
         
         
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
+    
+    for mud in muds:
+        if (pygame.Rect.colliderect(mud.rect, player.rect)):
+            player.speed = 5
+        else:
+            player.speed = oldSpeed
+        
+    
+    
 
     
     for skeleton in enemies:
