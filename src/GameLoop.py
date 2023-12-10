@@ -322,28 +322,6 @@ while run:
     for insight in item_entities:
         screen.blit(insight.image, insight.rect)
 
-    
-    print(len(bosses))
-    for boss in bosses:
-        screen.blit(pygame.transform.scale(boss.image, (400, 400)), boss.rect)
-        
-        boss.path_to_pos(player.rect.left - 200, player.rect.top - 200)
-        now = pygame.time.get_ticks()
-        
-        if(taking_damage and now - time_since_hit >= 300):
-            taking_damage = False
-            player.takeDamage('boss')
-        
-        if(pygame.Rect.colliderect(player.rect, boss.strikezone) and now - boss_last_hit >= boss_cooldown):
-            boss_last_hit = now
-            boss.attack()
-            taking_damage = True
-            time_since_hit = pygame.time.get_ticks()
-            
-        if(boss.health <= 0):
-            boss.die()
-            dead_bosses.append(boss)
-            bosses.remove(boss)
             
 
         
