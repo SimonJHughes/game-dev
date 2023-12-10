@@ -29,8 +29,8 @@ class BringerOfDeath(pygame.sprite.Sprite):
         self.rectHeight = 85
        
         
-        self.speed = 3
-        self.health = 4
+        self.speed = 2
+        self.health = 100
         self.maxHealth=100
         self.isDead = False
         self.isSuperDead = False
