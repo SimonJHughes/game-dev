@@ -66,7 +66,7 @@ button1 = Button("Speed", SCREEN_WIDTH // 2 - 100, 200, 200, 50, BLACK, WHITE, l
 button2 = Button("Health", SCREEN_WIDTH // 2 - 100, 300, 200, 50, BLACK, WHITE, lambda: print("Button 2 clicked"))
 button3 = Button("Ammo", SCREEN_WIDTH // 2 - 100, 400, 200, 50, BLACK, WHITE, lambda: print("Button 3 clicked"))
 button4 = Button("Done", SCREEN_WIDTH // 2 - 100, 500, 200, 50, BLACK, WHITE, lambda: print("Button 3 clicked"))
-button5 = Button("Skip to boss", 50, 500, 200, 50, BLACK, WHITE, lambda: print("Button 3 clicked"))
+
 
 
 SPELL_AMT = 5
@@ -240,11 +240,7 @@ while run:
                 elif button4.rect.collidepoint(pygame.mouse.get_pos()):
                     change_wave = True
                     show_menu = False
-                elif button5.rect.collidepoint(pygame.mouse.get_pos()):
-                    current_wave = 3
-                    change_wave = True
-                    show_menu = False
-        
+              
                 
     
     ################RUDIMENTARY SPELL FUNCTIONALITY UNTIL I CAN GET IT TO WORK OUTSIDE OF GAME LOOP###########################
@@ -462,7 +458,7 @@ while run:
         button2.draw(screen)
         button3.draw(screen)
         button4.draw(screen)
-        button5.draw(screen)
+     
     
     pygame.display.flip()
     clock.tick(20)
