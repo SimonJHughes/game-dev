@@ -20,6 +20,7 @@ class BringerOfDeath(pygame.sprite.Sprite):
         #position image in the screen surface
         self.rect.topleft = position
         
+        
         #variable for looping the frame sequence
         self.frame = 0
         self.direction ='d'
@@ -28,9 +29,15 @@ class BringerOfDeath(pygame.sprite.Sprite):
         self.rectHeight = 85
        
         
-        self.speed = 2
-        self.health = 100
+        self.speed = 3
+        self.health = 4
         self.maxHealth=100
+        self.isDead = False
+        self.isSuperDead = False
+        
+        self.hitbox = pygame.Rect(self.rect.left + 90, self.rect.top + 100, self.rect.width + 100, self.rect.width + 200)
+        self.strikezone = pygame.Rect(self.rect.left, self.rect.top + 50, self.rect.width + 200, self.rect.height + 200)
+        self.attacking = False
 
        
         
@@ -56,87 +63,120 @@ class BringerOfDeath(pygame.sprite.Sprite):
             self.health -=spell.damage
         
     def die(self):
-        
+        self.frame = -1
         self.clip(self.death_states)
         self.image = self.sheet.subsurface(self.sheet.get_clip())
+        self.isDead = True
+        
         
 
     def get_frame(self, frame_set):
         #looping the sprite sequences.
         self.frame += 1
+            
         
         #if loop index is higher that the size of the frame return to the first frame 
         if self.frame > (len(frame_set) - 1):
             self.frame = 0
+            if(frame_set == self.attack_states):
+                self.attacking = False
+            elif(frame_set == self.death_states):
+                self.frame = len(frame_set) - 1
+                
         
         return frame_set[self.frame]
 
     def clip(self, clipped_rect):
-        if type(clipped_rect) is dict:
+        if type(clipped_rect) is dict:     
             self.sheet.set_clip(pygame.Rect(self.get_frame(clipped_rect)))
         else:
             self.sheet.set_clip(pygame.Rect(clipped_rect))
         return clipped_rect
 
     def update(self, direction):
-        if direction == 'left':
-            self.clip(self.walk_states)
-            #animate rect coordinates
-            self.rect.x -= self.speed
+        if(not self.isDead):
+            if direction == 'left':
+                self.clip(self.walk_states)
+                #animate rect coordinates
+                self.rect.x -= self.speed
+                self.hitbox.x -= self.speed
+                self.strikezone.x -= self.speed
 
-            if(self.rect.x<=0):
-                self.rect.x=0
+                if(self.rect.x<=0):
+                    self.rect.x=0
+                
+                
+            if direction == 'right':
+                self.clip(self.walk_states)
+                self.rect.x += self.speed
+                self.hitbox.x += self.speed
+                self.strikezone.x += self.speed
+                if(self.rect.x>=800-self.rectWidth):
+                    self.rect.x=800-self.rectWidth
+
+            if direction == 'up':
+                self.clip(self.walk_states)
+                self.rect.y -= self.speed
+                self.hitbox.y -= self.speed
+                self.strikezone.y -= self.speed
+                
+                if(self.rect.y<=0):
+                    self.rect.y=0
+            if direction == 'down':
+                self.clip(self.walk_states)
+
+                self.rect.y += self.speed
+                self.hitbox.y += self.speed
+                self.strikezone.y += self.speed
+                if(self.rect.y>=600-self.rectHeight):
+                    self.rect.y=600-self.rectHeight
+
             
-            
-        if direction == 'right':
-            self.clip(self.walk_states)
-            self.rect.x += self.speed
-            if(self.rect.x>=800-self.rectWidth):
-                self.rect.x=800-self.rectWidth
 
-        if direction == 'up':
-            self.clip(self.walk_states)
-            self.rect.y -= self.speed
-            if(self.rect.y<=0):
-                self.rect.y=0
-        if direction == 'down':
-            self.clip(self.walk_states)
-
-            self.rect.y += self.speed
-            if(self.rect.y>=600-self.rectHeight):
-                self.rect.y=600-self.rectHeight
-
-        
-
-        if direction == 'right':
-            self.image = self.sheet.subsurface(self.sheet.get_clip())
-            self.image= pygame.transform.flip(self.image, 1, 0)
+            if direction == 'right':
+                self.image = self.sheet.subsurface(self.sheet.get_clip())
+                self.image= pygame.transform.flip(self.image, 1, 0)
 
 
+            else:
+                self.image = self.sheet.subsurface(self.sheet.get_clip())
+                
         else:
+            self.clip(self.death_states)
             self.image = self.sheet.subsurface(self.sheet.get_clip())
         
     def path_to_pos(self, x, y):
-        x_distance = self.rect.x - x
-        y_distance = self.rect.y - y
-        
-        if(abs(x_distance) > abs(y_distance)):
-            if(x_distance > 0):
-                self.update('left')
-                self.direction = 'l'
-            elif(x_distance <= 0):
-                self.update('right')
-                self.direction = 'r'
+        if(not self.attacking):
+            x_distance = self.rect.x - x
+            y_distance = self.rect.y - y
+            
+            if(abs(x_distance) > abs(y_distance)):
+                    if(x_distance > 0):
+                        self.update('left')
+                        self.direction = 'l'
+                    elif(x_distance <= 0):
+                        self.update('right')
+                        self.direction = 'r'
+            else:
+                    if(y_distance > 0):
+                        self.update('up')
+                        self.direction = 'u'
+                    elif(y_distance <= 0):
+                        self.update('down')
+                        self.direction = 'd'
         else:
-            if(y_distance > 0):
-                self.update('up')
-                self.direction = 'u'
-            elif(y_distance <= 0):
-                self.update('down')
-                self.direction = 'd'
+            self.clip(self.attack_states)
+            if(self.direction == 'r'):
+                self.image = self.sheet.subsurface(self.sheet.get_clip())
+                self.image = pygame.transform.flip(self.image, 1, 0)
+            else:
+                self.image = self.sheet.subsurface(self.sheet.get_clip())
+            
         
 
     def attack(self):
+        self.attacking = True
+        self.frame = 0
         self.clip(self.attack_states)
         self.image = self.sheet.subsurface(self.sheet.get_clip())
        

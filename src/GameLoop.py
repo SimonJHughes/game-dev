@@ -107,7 +107,10 @@ spellUIFont =pygame.font.Font('src/ENDOR.ttf', 25)
 player = player.Character((400, 300))
 first_skeleton = Skeleton.Skeleton((100, 100))
 enemies = [first_skeleton]
+bosses = []
+bosses.append(BringerOfDeath.BringerOfDeath((1000, 300)))
 dead_enemies = []
+dead_bosses = []
 
 #Array storing insight entities
 total_insight = 0
@@ -141,10 +144,10 @@ wavecheck = pygame.USEREVENT + 4
 pygame.time.set_timer(wavecheck, wavecheck_interval)
 
 
-total_skeletons = 2
+total_skeletons = 1
 skeletons_spawned = 1
 
-total_bats = 1
+total_bats = 0
 bats_spawned = 0
 
 total_slimes = 0
@@ -157,6 +160,13 @@ change_wave = False
 speed_cost = 1
 health_cost = 1
 ammo_cost = 1
+
+
+boss_cooldown = 3000 # three seconds
+boss_last_hit = pygame.time.get_ticks()
+
+taking_damage = False
+time_since_hit = pygame.time.get_ticks()
 
 max_particles = 5
 
@@ -171,20 +181,21 @@ while run:
     if(change_wave):
         change_wave = False
         dead_enemies.clear()
+        dead_bosses.clear()
         current_wave += 1
         skeletons_spawned = 0
         bats_spawned = 0
         slimes_spawned = 0
         
-        total_skeletons *= 1
-        total_bats *= 1
-        total_slimes *= 1
+        total_skeletons *= 2
+        total_bats *= 2
+        total_slimes *= 2
         if(current_wave == 2):
             total_slimes = 2
         if(current_wave == 3):
             total_bats = 2
         if(current_wave == 4):
-            enemies.append(BringerOfDeath.BringerOfDeath((1000, 300)))
+            bosses.append(BringerOfDeath.BringerOfDeath((1000, 300)))
             
     for event in pygame.event.get():
         if(event.type == pygame.QUIT):
@@ -201,7 +212,7 @@ while run:
             enemies.append(Slime.Slime((random.randint(100, 700), random.randint(100, 600))))
             slimes_spawned += 1
             pygame.time.set_timer(spawn_slime, int(slime_interval * 0.5))
-        if(event.type == wavecheck and len(dead_enemies) >= total_bats + total_skeletons + total_slimes * 2 + total_slimes):
+        if(event.type == wavecheck and len(dead_enemies) >= total_bats + total_skeletons + total_slimes * 2 + total_slimes and len(enemies) <= 0 and len(bosses) <= 0):
             show_menu = True
         if (event.type==pygame.KEYDOWN and event.key ==pygame.K_TAB):
                 SPELL_INDEX+= 1 
@@ -237,6 +248,10 @@ while run:
             particle.y+=particle.ySpeed
         else:
             particles.pop(0)
+        for boss in bosses:
+            if(pygame.Rect.colliderect(particle.rect, boss.hitbox)):
+                particle.rect = (pygame.Rect(-1000, -1000, 0, 0,))
+                boss.takeDamage(particle)
         for skeleton in enemies:
             if (pygame.Rect.colliderect(particle.rect, skeleton.rect)):
                 #draw skeleton health bar when it takes damage
@@ -285,15 +300,42 @@ while run:
     
     for dead_enemy in dead_enemies:
         screen.blit(pygame.transform.scale(dead_enemy.image, (50, 60)), dead_enemy.rect)
+        
+    for dead_boss in dead_bosses:
+        if(not dead_boss.isSuperDead):
+            dead_boss.update('r')
+            screen.blit(pygame.transform.scale(boss.image, (400, 400)), boss.rect)
+        
    
     for skeleton in enemies:
-        if(isinstance(skeleton, BringerOfDeath.BringerOfDeath)):
-            screen.blit(pygame.transform.scale(skeleton.image, (400, 400)), skeleton.rect)
-        else:
-            screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
+        screen.blit(pygame.transform.scale(skeleton.image, (50, 60)), skeleton.rect)
      
     for insight in item_entities:
         screen.blit(insight.image, insight.rect)
+        
+    for boss in bosses:
+        screen.blit(pygame.transform.scale(boss.image, (400, 400)), boss.rect)
+        
+        boss.path_to_pos(player.rect.left - 200, player.rect.top - 200)
+        now = pygame.time.get_ticks()
+        
+        if(taking_damage and now - time_since_hit >= 300):
+            taking_damage = False
+            player.takeDamage('boss')
+        
+        if(pygame.Rect.colliderect(player.rect, boss.strikezone) and now - boss_last_hit >= boss_cooldown):
+            boss_last_hit = now
+            boss.attack()
+            taking_damage = True
+            time_since_hit = pygame.time.get_ticks()
+            
+        if(boss.health <= 0):
+            boss.die()
+            dead_bosses.append(boss)
+            bosses.remove(boss)
+            
+
+        
         
     screen.blit(pygame.transform.scale(player.image, (60,60)), player.rect)
 
@@ -306,6 +348,10 @@ while run:
                 player.takeDamage('slime')
             elif(isinstance(skeleton, Bat.Bat)):
                 player.takeDamage('bat')
+                
+    #for boss in bosses:
+        #if(pygame.Rect.colliderect(player.rect, boss.hitbox)):
+            #player.takeDamage('boss')
 
     for skeleton in enemies:
         if(skeleton.health<=0):

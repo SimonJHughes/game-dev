@@ -95,7 +95,7 @@ class Character(pygame.sprite.Sprite):
         elif (enemy == 'slime'):
             self.health -= 3
         elif (enemy == 'boss'):
-            self.health -= 10
+            self.health -= 15
         
         
     def die(self):
